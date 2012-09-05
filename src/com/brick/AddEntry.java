@@ -2,7 +2,6 @@ package com.brick;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -14,16 +13,13 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Random;
 
-import javax.jws.Oneway;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.ListCellRenderer;
 
 import com.brick.database.DatabaseHelper;
 
@@ -35,7 +31,7 @@ public class AddEntry extends JInternalFrame {
 			txtPetrol;
 	private JButton btnAddNew, btnCancel, btnClear,btnAddNext;
 	private JPanel fieldsPanel;
-	private JComboBox<Object> cmbDriver,cmbVehicleNo;
+	private JComboBox cmbDriver,cmbVehicleNo;
 
 	private JPanel buttonPanel;
 
@@ -58,8 +54,8 @@ public class AddEntry extends JInternalFrame {
 		lblEntryDate = new JLabel("  Entry date");
 		lblPetrol = new JLabel("  petrol(ltr)");
 		lblExitDate = new JLabel("  Exit Date");
-		cmbDriver = new JComboBox<Object>();
-		cmbVehicleNo=new JComboBox<Object>();
+		cmbDriver = new JComboBox();
+		cmbVehicleNo=new JComboBox();
 		txtCheatNo = new JTextField(10);
 		txtVechileNo = new JTextField(10);
 		txtCheatType = new JTextField(10);
@@ -92,8 +88,8 @@ public class AddEntry extends JInternalFrame {
 		ResultSet rs=stmt1.executeQuery(Sql);
 		while(rs.next()){
 			Object[] cat={rs.getString("vehicle_no"),rs.getString("vehicle_no")};
-			cmbVehicleNo.addItem(cat);
-			cmbVehicleNo.setRenderer(new cbx());
+			cmbVehicleNo.addItem(rs.getString("vehicle_no"));
+//			cmbVehicleNo.setRenderer(new cbx());
 		}
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
@@ -254,22 +250,22 @@ public class AddEntry extends JInternalFrame {
 			}
 		});
 	}
-	public class cbx extends JLabel implements ListCellRenderer<Object>{
-
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		public Component getListCellRendererComponent(
-				JList<? extends Object> list, Object value, int index,
-				boolean isSelected, boolean cellHasFocus) {
-			Object[] tt=(Object[])value;
-			setText((String)tt[1]);
-			return list;
-		}
-		
-	}
+//	public class cbx extends JLabel implements ListCellRenderer<Object>{
+//
+//		/**
+//		 * 
+//		 */
+//		private static final long serialVersionUID = 1L;
+//
+//		@Override
+//		public Component getListCellRendererComponent(
+//				JList<? extends Object> list, Object value, int index,
+//				boolean isSelected, boolean cellHasFocus) {
+//			Object[] tt=(Object[])value;
+//			setText((String)tt[1]);
+//			return list;
+//		}
+//		
+//	}
 }// class closed
 
