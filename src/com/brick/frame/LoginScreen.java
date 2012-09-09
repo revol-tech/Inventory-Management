@@ -1,4 +1,4 @@
-package com.brick;
+package com.brick.frame;
 
 import java.awt.Dimension;
 import java.awt.Font;
@@ -92,12 +92,13 @@ public class LoginScreen extends JFrame {
 				}
 				// login here
 				if (databaseHelper.checkValidLogin(
-						txtUser.getText().toString(), txtPasswd.getText()
+						
+						txtUser.getText().toString(), txtPasswd.getPassword()
 								.toString())) {
+					System.out.println("is valid");
 					currentFrame.setVisible(false);
 					new MainWindow();
-					JOptionPane.showMessageDialog(null, "Valid User", "wow",
-							JOptionPane.DEFAULT_OPTION);
+					
 				} else {
 					JOptionPane.showMessageDialog(null, "InValid User", "lol",
 							JOptionPane.DEFAULT_OPTION);
