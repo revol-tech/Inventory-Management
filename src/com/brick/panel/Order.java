@@ -17,9 +17,9 @@ public class Order extends JPanel {
 	private final JLabel lblDriverName = new JLabel("Driver Name");
 	private final JLabel lblBrickType = new JLabel("Brick Type");
 	private final JTextField textField = new JTextField();
-	private final JComboBox<String> comboBox = new JComboBox<String>();
-	private final JComboBox<String> comboBox_1 = new JComboBox<String>();
-	private final JComboBox<String> comboBox_2 = new JComboBox<String>();
+	private final JComboBox comboBox = new JComboBox();
+	private final JComboBox comboBox_1 = new JComboBox();
+	private final JComboBox comboBox_2 = new JComboBox();
 	private final JCheckBox chckbxHalf = new JCheckBox("Half");
 	private final JTextField textField_1 = new JTextField();
 	private final JTextField textField_2 = new JTextField();

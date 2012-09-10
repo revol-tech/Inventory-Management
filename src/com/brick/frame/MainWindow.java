@@ -21,6 +21,7 @@ import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
 import com.brick.panel.NewUser;
+import com.brick.panel.NewVehicle;
 import com.brick.panel.Order;
 
 public class MainWindow extends JFrame implements WindowListener {
@@ -31,8 +32,9 @@ public class MainWindow extends JFrame implements WindowListener {
 	final static String TEXTPANEL = "Card with JTextField";
 	final static String USERADD = "Card with add user";
 	final static String ADD_ORDER = "Card with add trip";
+	final static String ADD_VEHICLE = "Card with add new vehicle";
 	public JMenu mnuOperations;
-	public JMenuItem mnuNewuser, mnuVehicle, mnuExit;
+	public JMenuItem mnuNewuser, mnuVehicle,mnuAddVehicle, mnuExit;
 
 	public MainWindow() {
 
@@ -54,12 +56,14 @@ public class MainWindow extends JFrame implements WindowListener {
 
 		NewUser newUser = new NewUser();
 		Order order = new Order();
+		NewVehicle newvehicle = new NewVehicle();
 
 		// Create the panel that contains the "cards".
 		cards = new JPanel(new CardLayout());
 		cards.add(new JPanel(), "1");
 		cards.add(newUser, USERADD);
 		cards.add(order, ADD_ORDER);
+		cards.add(newvehicle, ADD_VEHICLE);
 
 		pane.add(cards, BorderLayout.CENTER);
 	}
@@ -84,7 +88,19 @@ public class MainWindow extends JFrame implements WindowListener {
 		mnuNewuser.setActionCommand("newuser");
 		mnuNewuser.addActionListener(menulistener);
 
-		// vechile
+		// Add vehicle
+		mnuAddVehicle = new JMenuItem("Add New Vehicle");
+		mnuAddVehicle.setForeground(Color.blue);
+		mnuAddVehicle.setFont(new Font("monospaced", Font.PLAIN, 12));
+		mnuAddVehicle.setMnemonic('v');
+		// mnuVehicle.setIcon(new ImageIcon(ClassLoader
+		// .getSystemResource("images/users.png")));
+		mnuAddVehicle.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O,
+				ActionEvent.CTRL_MASK));
+		mnuAddVehicle.setActionCommand("addVehicle");
+		mnuAddVehicle.addActionListener(menulistener);
+		
+		// order
 		mnuVehicle = new JMenuItem("Order");
 		mnuVehicle.setForeground(Color.blue);
 		mnuVehicle.setFont(new Font("monospaced", Font.PLAIN, 12));
@@ -109,6 +125,8 @@ public class MainWindow extends JFrame implements WindowListener {
 
 		mnuOperations.add(mnuNewuser);
 		mnuOperations.addSeparator();
+		mnuOperations.add(mnuAddVehicle);
+		mnuOperations.addSeparator();
 		mnuOperations.add(mnuVehicle);
 		mnuOperations.addSeparator();
 		mnuOperations.add(mnuExit);
@@ -126,6 +144,9 @@ public class MainWindow extends JFrame implements WindowListener {
 			} else if (ActCmd.equalsIgnoreCase("addVehicleinfo")) {
 				CardLayout cl = (CardLayout) (cards.getLayout());
 				cl.show(cards, ADD_ORDER);
+			}else if (ActCmd.equalsIgnoreCase("addVehicle")) {
+				CardLayout cl = (CardLayout) (cards.getLayout());
+				cl.show(cards, ADD_VEHICLE);
 			} else if (ActCmd.equalsIgnoreCase("exit")) {
 				 ConfirmExit();
 			}
