@@ -23,7 +23,7 @@ public class frmSplash {
 				400, 300);
 
 		panel = (JPanel) window.getContentPane();
-		SplashImage = new JLabel(createImageIcon("images/splash.jpg", "test"));
+		SplashImage = new JLabel(new ImageIcon("images/ss.png"));
 		SplashText = new JLabel("revol-tech", SwingConstants.CENTER);
 		panel.add(SplashImage, BorderLayout.CENTER);
 		panel.add(SplashText, BorderLayout.SOUTH);
@@ -37,15 +37,7 @@ public class frmSplash {
 		window.dispose();
 	}// constructr closed
 
-	protected ImageIcon createImageIcon(String path, String description) {
-		java.net.URL imgURL = getClass().getResource(path);
-		if (imgURL != null) {
-			return new ImageIcon(imgURL, description);
-		} else {
-			System.err.println("Couldn't find file: " + path);
-			return null;
-		}
-	}
+	
 
 }// class closed
 
