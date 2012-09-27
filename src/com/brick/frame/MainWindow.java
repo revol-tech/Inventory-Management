@@ -4,7 +4,11 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -37,20 +41,25 @@ public class MainWindow extends JFrame implements WindowListener {
 	final static String ADD_LABOR_WORK = "Card with Labor work";
 	public JMenu mnuOperations;
 	public JMenuItem mnuNewuser, mnuVehicle,mnuAddVehicle,mnuAddLaborWork, mnuExit;
-
+	Dimension screen;
 	public MainWindow() {
 
 		// Create and set up the window.
 		super("Inventory Management System");
+		
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		//this.setLayout(new GridBagLayout());
 
 		// Create and set up the content pane.
-		this.addComponentToPane(this.getContentPane());
+		Container contentPane = this.getContentPane();
+        contentPane.setLayout(new BorderLayout());
+		this.addComponentToPane(contentPane);
 		this.setJMenuBar(CreateJMenuBar());
 		// Display the window.
 		this.pack();
 		this.setVisible(true);
+		 screen= Toolkit.getDefaultToolkit().getScreenSize();
 
 	}
 
@@ -61,12 +70,14 @@ public class MainWindow extends JFrame implements WindowListener {
 		NewVehicle newvehicle = new NewVehicle();
 		LaborWork laborwork = new LaborWork();
 		// Create the panel that contains the "cards".
-		cards = new JPanel(new CardLayout());
+		cards = new JPanel();
+		cards.setLayout(new CardLayout(250,100));
 		cards.add(new JPanel(), "1");
 		cards.add(newUser, USERADD);
 		cards.add(order, ADD_ORDER);
 		cards.add(newvehicle, ADD_VEHICLE);
 		cards.add(laborwork,ADD_LABOR_WORK);
+		//this.add(cards,new GridBagConstraints());
 
 		pane.add(cards, BorderLayout.CENTER);
 	}

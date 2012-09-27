@@ -14,6 +14,8 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+import com.brick.database.DatabaseHelper;
+
 public class NewUser extends JPanel {
 
 	private static final long serialVersionUID = 1L;
@@ -25,7 +27,7 @@ public class NewUser extends JPanel {
 	Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
 
 	public NewUser() {
-		
+
 		this.setSize(350, 270);
 		this.setLocation((screen.width - 500) / 2, ((screen.height - 350) / 2));
 		this.setLayout(null);
@@ -87,7 +89,7 @@ public class NewUser extends JPanel {
 		btnSave.addActionListener(new java.awt.event.ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-
+				DatabaseHelper databaseHelper = new DatabaseHelper();
 				if (txtUsername.getText() == null
 						|| txtUsername.getText().equals("")) {
 					JOptionPane.showMessageDialog(null, "Enter Username",
@@ -110,34 +112,23 @@ public class NewUser extends JPanel {
 					txtCPassword.requestFocus();
 					return;
 				}
-				if (!txtPassword.getPassword().equals(txtPassword.getPassword())) {
+				if (!txtPassword.getText()
+						.equals(txtPassword.getText())) {
 					JOptionPane.showMessageDialog(null,
 							"Passwords do not match.", "ERROR",
 							JOptionPane.DEFAULT_OPTION);
 					txtCPassword.requestFocus();
 					return;
 				}
-				try {
+				
 
-					/*Statement stmt = DatabaseHelper.getDBConnection()
-							.createStatement();
-					String sql = "INSERT INTO login (id,name,pwd) VALUES ("
-							+ new Random().nextInt(100) + ",'"
-							+ txtUsername.getText() + "', '"
-							+ txtPassword.getText() + "')";
-					int result = stmt.executeUpdate(sql);*/
-					int result=1;
-					if (result > 0) {
+					if (databaseHelper.addNewUser(txtUsername.getText().toString(),txtPassword.getText().toString())> 0) {
 						JOptionPane.showMessageDialog(null,
-								"User details is succesfully added", "SUCCESS",
+								"A new user is created", "SUCCESS",
 								JOptionPane.DEFAULT_OPTION);
-						// dispose();
+						
 					}
-				} catch (Exception in) {
-					JOptionPane.showMessageDialog(null,
-							"Error on database updation", "Updation failed",
-							JOptionPane.ERROR_MESSAGE);
-				}
+				
 			}
 		});
 

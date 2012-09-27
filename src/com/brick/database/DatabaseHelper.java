@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class DatabaseHelper {
 	private Connection connection = null;
@@ -43,10 +44,25 @@ public class DatabaseHelper {
 		}
 		return false;
 	}
+	public int addNewUser(String userName,String password){
+		String query="INSERT INTO user (username,password) values ('"+userName +"','"+password+"');";
+		Statement stmt=null;
+		int result=-1;
+		try{
+			stmt=connection.createStatement();
+			result=stmt.executeUpdate(query);
+			return result;
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+		
+	}
 	
 	public void insertOrder(String name){
 		
 		String query="";
 	}
+	
 
 }
