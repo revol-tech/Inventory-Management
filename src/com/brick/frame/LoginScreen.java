@@ -93,7 +93,7 @@ public class LoginScreen extends JFrame {
 				// login here
 				if (databaseHelper.checkValidLogin(
 						
-						txtUser.getText().toString(), txtPasswd.getPassword()
+						txtUser.getText().toString(), txtPasswd.getText()
 								.toString())) {
 					System.out.println("is valid");
 					currentFrame.setVisible(false);
