@@ -16,9 +16,7 @@ public class DatabaseHelper {
 
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			connection = DriverManager.getConnection(
-					"jdbc:mysql://localhost:3306/brick_inventory", "root",
-					"shresthas");
+			connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/brick_inventory", "root","bhaktapur11");
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
