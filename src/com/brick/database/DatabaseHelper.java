@@ -18,7 +18,7 @@ public class DatabaseHelper {
 			Class.forName("com.mysql.jdbc.Driver");
 			connection = DriverManager.getConnection(
 					"jdbc:mysql://localhost:3306/brick_inventory", "root",
-					"admin");
+					"shresthas");
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -57,6 +57,40 @@ public class DatabaseHelper {
 		}
 		return result;
 		
+	}
+	
+	public int insertVehicle(String number,String desc)
+	{
+		String query="insert into vehicle(vehicle_no,Vechile_desc ) values('"+number+"','"+desc+"');";
+		Statement stmt = null;
+		int result =-1;
+		try {
+			stmt=connection.createStatement();
+			result= stmt.executeUpdate(query);
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	public int insertLabour(String name,String type,String brick)
+	{
+		if (type=="Patheri")
+		{
+			brick="0";
+		}
+		String query="insert into labour(name,type,brick_amount ) values('"+name+"','"+type+"','"+brick+"');";
+		Statement stmt = null;
+		int result =-1;
+		try {
+			stmt=connection.createStatement();
+			result= stmt.executeUpdate(query);
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 	
 	public void insertOrder(String name){

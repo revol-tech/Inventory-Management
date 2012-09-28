@@ -1,29 +1,35 @@
 package com.brick.panel;
 
-import javax.swing.JPanel;
-import javax.swing.JLabel;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import java.awt.Font;
+
+import com.brick.database.DatabaseHelper;
 
 public class NewVehicle extends JPanel {
 	private final JLabel lblVehicleNumber = new JLabel("Vehicle Number");
 	private final JLabel lblVehicleDescription = new JLabel("Vehicle Description");
 	private final JButton btnSubmit = new JButton("Submit");
 	private final JButton btnCancle = new JButton("Cancle");
-	private final JTextField textField = new JTextField();
-	private final JTextField textField_1 = new JTextField();
+	private final JTextField vehicleno = new JTextField();
+	private final JTextField vehicledesc = new JTextField();
 	private final JLabel lblVehicle = new JLabel("New Vehicle Information");
 
 	/**
 	 * Create the panel.
 	 */
 	public NewVehicle() {
-		textField_1.setBounds(253, 104, 145, 19);
-		textField_1.setColumns(10);
-		textField.setBounds(256, 60, 141, 19);
-		textField.setColumns(10);
+		vehicledesc.setBounds(253, 104, 145, 19);
+		vehicledesc.setColumns(10);
+		vehicleno.setBounds(256, 60, 141, 19);
+		vehicleno.setColumns(10);
 
 		initGUI();
 	}
@@ -35,16 +41,31 @@ public class NewVehicle extends JPanel {
 		lblVehicleDescription.setBounds(98, 103, 148, 15);
 		
 		add(lblVehicleDescription);
+		btnSubmit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if (vehicleno.getText()!=null && vehicledesc.getText()!=null){
+					DatabaseHelper databaseHelper = new DatabaseHelper();
+					if(databaseHelper.insertVehicle(vehicleno.getText().toString(),vehicledesc.getText().toString())>0){
+						JOptionPane.showMessageDialog(null, "successfully added","succedd",JOptionPane.DEFAULT_OPTION);
+					}
+									
+				}
+			}
+		});
 		btnSubmit.setBounds(83, 211, 117, 25);
 		
 		add(btnSubmit);
+		btnCancle.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
 		btnCancle.setBounds(247, 211, 117, 25);
 		
 		add(btnCancle);
 		
-		add(textField);
+		add(vehicleno);
 		
-		add(textField_1);
+		add(vehicledesc);
 		lblVehicle.setFont(new Font("Dialog", Font.BOLD, 14));
 		lblVehicle.setVerticalAlignment(SwingConstants.TOP);
 		lblVehicle.setBounds(114, 12, 250, 25);

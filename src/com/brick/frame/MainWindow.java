@@ -15,7 +15,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -24,6 +23,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
+import com.brick.panel.Labor;
 import com.brick.panel.LaborWork;
 import com.brick.panel.NewUser;
 import com.brick.panel.NewVehicle;
@@ -39,9 +39,11 @@ public class MainWindow extends JFrame implements WindowListener {
 	final static String ADD_ORDER = "Card with add trip";
 	final static String ADD_VEHICLE = "Card with add new vehicle";
 	final static String ADD_LABOR_WORK = "Card with Labor work";
+	final static String ADD_LABOR = "Card to add new Labor";
 	public JMenu mnuOperations;
-	public JMenuItem mnuNewuser, mnuVehicle,mnuAddVehicle,mnuAddLaborWork, mnuExit;
-	Dimension screen;
+
+	public JMenuItem mnuNewuser, mnuVehicle,mnuAddVehicle,mnuAddLaborWork, mnuExit,mnuAddLabor;
+
 	public MainWindow() {
 
 		// Create and set up the window.
@@ -69,6 +71,7 @@ public class MainWindow extends JFrame implements WindowListener {
 		Order order = new Order();
 		NewVehicle newvehicle = new NewVehicle();
 		LaborWork laborwork = new LaborWork();
+		Labor labor = new Labor();
 		// Create the panel that contains the "cards".
 		cards = new JPanel();
 		cards.setLayout(new CardLayout(250,100));
@@ -77,7 +80,11 @@ public class MainWindow extends JFrame implements WindowListener {
 		cards.add(order, ADD_ORDER);
 		cards.add(newvehicle, ADD_VEHICLE);
 		cards.add(laborwork,ADD_LABOR_WORK);
+<<<<<<< HEAD
 		//this.add(cards,new GridBagConstraints());
+=======
+		cards.add(labor,ADD_LABOR);
+>>>>>>> New labour form
 
 		pane.add(cards, BorderLayout.CENTER);
 	}
@@ -92,7 +99,7 @@ public class MainWindow extends JFrame implements WindowListener {
 		mnuOperations.setMnemonic('O');
 		mnuOperations.setEnabled(true);
 
-		mnuNewuser = new JMenuItem("AddNew User");
+		mnuNewuser = new JMenuItem("Add New User");
 		mnuNewuser.setForeground(Color.blue);
 		mnuNewuser.setFont(new Font("monospaced", Font.PLAIN, 12));
 		mnuNewuser.setMnemonic('L');
@@ -101,6 +108,17 @@ public class MainWindow extends JFrame implements WindowListener {
 				ActionEvent.CTRL_MASK));
 		mnuNewuser.setActionCommand("newuser");
 		mnuNewuser.addActionListener(menulistener);
+		
+		//new labor
+		mnuAddLabor = new JMenuItem("Add New Labor");
+		mnuAddLabor.setForeground(Color.blue);
+		mnuAddLabor.setFont(new Font("monospaced", Font.PLAIN, 12));
+		mnuAddLabor.setMnemonic('L');
+		//mnuNewuser.setIcon(new ImageIcon(getClass().getResource("images/users.png")));
+		mnuAddLabor.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L,
+				ActionEvent.CTRL_MASK));
+		mnuAddLabor.setActionCommand("newlabor");
+		mnuAddLabor.addActionListener(menulistener);
 
 		// Add vehicle
 		mnuAddVehicle = new JMenuItem("Add New Vehicle");
@@ -152,6 +170,8 @@ public class MainWindow extends JFrame implements WindowListener {
 
 		mnuOperations.add(mnuNewuser);
 		mnuOperations.addSeparator();
+		mnuOperations.add(mnuAddLabor);
+		mnuOperations.addSeparator();
 		mnuOperations.add(mnuAddVehicle);
 		mnuOperations.addSeparator();
 		mnuOperations.add(mnuVehicle);
@@ -176,6 +196,9 @@ public class MainWindow extends JFrame implements WindowListener {
 			}else if (ActCmd.equalsIgnoreCase("addVehicle")) {
 				CardLayout cl = (CardLayout) (cards.getLayout());
 				cl.show(cards, ADD_VEHICLE);
+			}else if (ActCmd.equalsIgnoreCase("newlabor")) {
+				CardLayout cl = (CardLayout) (cards.getLayout());
+				cl.show(cards, ADD_LABOR);
 			}else if (ActCmd.equalsIgnoreCase("addLaborWork")) {
 				CardLayout cl = (CardLayout) (cards.getLayout());
 				cl.show(cards, ADD_LABOR_WORK);
