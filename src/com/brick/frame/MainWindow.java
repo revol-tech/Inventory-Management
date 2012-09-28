@@ -80,11 +80,7 @@ public class MainWindow extends JFrame implements WindowListener {
 		cards.add(order, ADD_ORDER);
 		cards.add(newvehicle, ADD_VEHICLE);
 		cards.add(laborwork,ADD_LABOR_WORK);
-<<<<<<< HEAD
-		//this.add(cards,new GridBagConstraints());
-=======
 		cards.add(labor,ADD_LABOR);
->>>>>>> New labour form
 
 		pane.add(cards, BorderLayout.CENTER);
 	}
