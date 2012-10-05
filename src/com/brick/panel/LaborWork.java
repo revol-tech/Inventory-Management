@@ -1,5 +1,6 @@
 package com.brick.panel;
 
+<<<<<<< HEAD
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,6 +19,16 @@ import com.brick.database.DatabaseHelper;
 import com.brick.helper.AutoCompleteData;
 import com.brick.helper.AutoCompletion;
 import com.brick.helper.LaborHelper;
+=======
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+>>>>>>> 80bf514e5c3b84150451067da1ede41e310c71c9
 
 public class LaborWork extends JPanel {
 

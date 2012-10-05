@@ -23,6 +23,7 @@ public class NewUser extends JPanel {
 	private JPasswordField txtPassword, txtCPassword;
 	private JTextField txtUsername, txtName;
 	private JButton btnSave, btnCancel;
+	JPanel panelNewUser;
 
 	Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
 
@@ -31,7 +32,7 @@ public class NewUser extends JPanel {
 		this.setSize(350, 270);
 		this.setLocation((screen.width - 500) / 2, ((screen.height - 350) / 2));
 		this.setLayout(null);
-
+		panelNewUser= this;
 		lblUsername = new JLabel("Username");
 		lblPassword = new JLabel("Password");
 		lblConfirmMsg = new JLabel("Re-enter Password");
@@ -86,9 +87,18 @@ public class NewUser extends JPanel {
 				}
 			}
 		});
+		btnCancel.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				resetField();
+				panelNewUser.setVisible(false);
+			System.out.println("hello");
+			}
+		});
 		btnSave.addActionListener(new java.awt.event.ActionListener() {
 
+			
 			public void actionPerformed(ActionEvent e) {
+
 				DatabaseHelper databaseHelper = new DatabaseHelper();
 				if (txtUsername.getText() == null
 						|| txtUsername.getText().equals("")) {
@@ -128,16 +138,22 @@ public class NewUser extends JPanel {
 								JOptionPane.DEFAULT_OPTION);
 						
 					}
+
 				
 			}
 		});
 
-		btnCancel.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent e) {
-				// dispose();
-			}
-		});
-	}// constructor closed
+		}// constructor closed
+	
+	//action listener
+	
+	
+	public void resetField()
+	{
+		
+		txtUsername.setText("");
+		txtCPassword.setText("");
+		txtPassword.setText("");
+	}
 }// class closed
 

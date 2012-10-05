@@ -18,8 +18,11 @@ import java.awt.event.WindowListener;
 import java.text.DateFormat;
 import java.util.Date;
 
+<<<<<<< HEAD
 import javax.swing.BorderFactory;
 import javax.swing.JDesktopPane;
+=======
+>>>>>>> 80bf514e5c3b84150451067da1ede41e310c71c9
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -31,7 +34,11 @@ import javax.swing.JTextField;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 
+<<<<<<< HEAD
 import com.brick.helper.clsSettings;
+=======
+import com.brick.panel.Labor;
+>>>>>>> 80bf514e5c3b84150451067da1ede41e310c71c9
 import com.brick.panel.LaborWork;
 import com.brick.panel.NewUser;
 import com.brick.panel.NewVehicle;
@@ -47,7 +54,9 @@ public class MainWindow extends JFrame implements WindowListener {
 	final static String ADD_ORDER = "Card with add trip";
 	final static String ADD_VEHICLE = "Card with add new vehicle";
 	final static String ADD_LABOR_WORK = "Card with Labor work";
+	final static String ADD_LABOR = "Card to add new Labor";
 	public JMenu mnuOperations;
+<<<<<<< HEAD
 	public JMenuItem mnuNewuser, mnuVehicle, mnuAddVehicle, mnuAddLaborWork,
 			mnuExit;
 	clsSettings settings = new clsSettings();
@@ -64,6 +73,10 @@ public class MainWindow extends JFrame implements WindowListener {
 	JFrame jFrame;
 	Container cont;
 	
+=======
+
+	public JMenuItem mnuNewuser, mnuVehicle,mnuAddVehicle,mnuAddLaborWork, mnuExit,mnuAddLabor;
+>>>>>>> 80bf514e5c3b84150451067da1ede41e310c71c9
 
 	public MainWindow() {
 
@@ -181,14 +194,20 @@ public class MainWindow extends JFrame implements WindowListener {
 		Order order = new Order();
 		NewVehicle newvehicle = new NewVehicle();
 		LaborWork laborwork = new LaborWork();
+		Labor labor = new Labor();
 		// Create the panel that contains the "cards".
 		cards = new JPanel(new CardLayout());
 		cards.add(new JPanel(), "1");
 		cards.add(newUser, USERADD);
 		cards.add(order, ADD_ORDER);
 		cards.add(newvehicle, ADD_VEHICLE);
+<<<<<<< HEAD
 		cards.add(laborwork, ADD_LABOR_WORK);
 		// this.add(cards,new GridBagConstraints());
+=======
+		cards.add(laborwork,ADD_LABOR_WORK);
+		cards.add(labor,ADD_LABOR);
+>>>>>>> 80bf514e5c3b84150451067da1ede41e310c71c9
 
 		// pane.add(cards, BorderLayout.CENTER);
 		// JButton nextButton = new JButton("Next");
@@ -206,7 +225,7 @@ public class MainWindow extends JFrame implements WindowListener {
 		mnuOperations.setMnemonic('O');
 		mnuOperations.setEnabled(true);
 
-		mnuNewuser = new JMenuItem("AddNew User");
+		mnuNewuser = new JMenuItem("Add New User");
 		mnuNewuser.setForeground(Color.blue);
 		mnuNewuser.setFont(new Font("monospaced", Font.PLAIN, 12));
 		mnuNewuser.setMnemonic('L');
@@ -216,6 +235,17 @@ public class MainWindow extends JFrame implements WindowListener {
 				ActionEvent.CTRL_MASK));
 		mnuNewuser.setActionCommand("newuser");
 		mnuNewuser.addActionListener(menulistener);
+		
+		//new labor
+		mnuAddLabor = new JMenuItem("Add New Labor");
+		mnuAddLabor.setForeground(Color.blue);
+		mnuAddLabor.setFont(new Font("monospaced", Font.PLAIN, 12));
+		mnuAddLabor.setMnemonic('L');
+		//mnuNewuser.setIcon(new ImageIcon(getClass().getResource("images/users.png")));
+		mnuAddLabor.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L,
+				ActionEvent.CTRL_MASK));
+		mnuAddLabor.setActionCommand("newlabor");
+		mnuAddLabor.addActionListener(menulistener);
 
 		// Add vehicle
 		mnuAddVehicle = new JMenuItem("Add New Vehicle");
@@ -266,6 +296,8 @@ public class MainWindow extends JFrame implements WindowListener {
 		mnuExit.addActionListener(menulistener);
 
 		mnuOperations.add(mnuNewuser);
+		mnuOperations.addSeparator();
+		mnuOperations.add(mnuAddLabor);
 		mnuOperations.addSeparator();
 		mnuOperations.add(mnuAddVehicle);
 		mnuOperations.addSeparator();
@@ -318,7 +350,14 @@ public class MainWindow extends JFrame implements WindowListener {
 			} else if (ActCmd.equalsIgnoreCase("addVehicle")) {
 				CardLayout cl = (CardLayout) (cards.getLayout());
 				cl.show(cards, ADD_VEHICLE);
+<<<<<<< HEAD
 			} else if (ActCmd.equalsIgnoreCase("addLaborWork")) {
+=======
+			}else if (ActCmd.equalsIgnoreCase("newlabor")) {
+				CardLayout cl = (CardLayout) (cards.getLayout());
+				cl.show(cards, ADD_LABOR);
+			}else if (ActCmd.equalsIgnoreCase("addLaborWork")) {
+>>>>>>> 80bf514e5c3b84150451067da1ede41e310c71c9
 				CardLayout cl = (CardLayout) (cards.getLayout());
 				cl.show(cards, ADD_LABOR_WORK);
 			} else if (ActCmd.equalsIgnoreCase("exit")) {
