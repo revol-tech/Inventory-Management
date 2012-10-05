@@ -6,6 +6,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+
+import com.brick.helper.LaborHelper;
 
 public class DatabaseHelper {
 	private Connection connection = null;
@@ -63,6 +66,25 @@ public class DatabaseHelper {
 		
 		String query="";
 	}
+	 public ArrayList<LaborHelper> fetchLaborName()
+     {
+             ArrayList<LaborHelper> list = new ArrayList<LaborHelper>();
+             String query = "SELECT * From labour";
+             try {
+                     pst = connection.prepareStatement(query);
+                     rs = pst.executeQuery();
+                     while (rs.next()) {
+                             LaborHelper labor = new LaborHelper();
+                             labor.id = rs.getInt("id");
+                             labor.name = rs.getString("name");
+                             list.add(labor);
+                             }
+                     } catch (SQLException e) {
+
+                     e.printStackTrace();
+             }
+             return list;
+     }
 	
 
 }
