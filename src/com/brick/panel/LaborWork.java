@@ -13,6 +13,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
+import javax.swing.plaf.basic.BasicComboBoxEditor;
 
 import com.brick.database.DatabaseHelper;
 import com.brick.helper.AutoCompleteData;
@@ -74,12 +75,12 @@ public class LaborWork extends JPanel {
 			System.out.println(laborHelper1.name);
 			labourname.addItem(laborHelper1);
 		}
-		//labourname.setEditable(true);
-		//labourname.setEditor(new MyComboEditor());
+		labourname.setEditor(new searchComboBoxEditor());
 		labourname.setRenderer(new MyListRender());
+		labourname.setEditable(true);
 		
 		//AutoCompletion.enable(labourname);
-		
+		new AutoCompleteData(labourname);
 		initGUI();
 
 	}
@@ -238,65 +239,31 @@ public class LaborWork extends JPanel {
 		}
 
 	}
-	public class MyComboEditor implements ComboBoxEditor {
-		  JTextField textFeild;
-		  LaborHelper myObject;
-		  Object myReturnObject;
+	class searchComboBoxEditor extends BasicComboBoxEditor {
 
-		public MyComboEditor(){
-		    textFeild = new JTextField();   
-		    
-		}
+        public searchComboBoxEditor() {
+            super();
+        }
 
-		@Override
-		public Component getEditorComponent() {
-		    return textFeild;
-		}
+        @Override
+        public void setItem(Object anObject) {
+            if (anObject == null) {
+                super.setItem("");
+            } else {
+            	if(anObject instanceof LaborHelper){
+                LaborHelper o = (LaborHelper)anObject;
+                System.out.print("m"+o.name);
+                super.setItem(o.name);
+            	}else if(anObject instanceof String){
+            		super.setItem(anObject);
+            	}
+            }
+        }
 
-		@Override
-		public void setItem(Object anObject) {
-
-		    if(anObject != null){
-		        myObject = (LaborHelper)anObject;
-		        myReturnObject = anObject;            
-		        textFeild.setText(myObject.name);
-		     }
-		     else{ 
-		       myReturnObject = anObject;
-		     }
-		}
-
-		@Override
-		public Object getItem() {
-		    String objectTxt = myObject.name;
-		    String feildTxt = textFeild.getText();
-
-		    if(objectTxt.equals(feildTxt)){
-		        return myReturnObject;
-		    }
-		    else{
-		    	LaborHelper ll=new  LaborHelper();
-		    	ll.id=0;
-		    	ll.name=textFeild.getText();
-		        return ll;
-		    }
-		}
-
-		@Override
-		public void selectAll() {
-		    throw new UnsupportedOperationException(
-		            "Not supported yet. in select All");
-		}
-
-		@Override
-		public void addActionListener(ActionListener l) {
-		    textFeild.addActionListener(l);     
-		}
-
-		@Override
-		public void removeActionListener(ActionListener l) {
-		    textFeild.removeActionListener(l);
-		}    
-		}
-
+        @Override
+        public Object getItem() {
+            return new LaborHelper();
+        }
+    }
+	
 }

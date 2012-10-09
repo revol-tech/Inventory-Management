@@ -51,7 +51,7 @@ public class AutoCompleteData extends PlainDocument {
         });
         // Handle initially selected object
         Object selected = comboBox.getSelectedItem();
-        if (selected!=null) setText(selected.toString());
+        if (selected!=null) setText(((LaborHelper)selected).name);
         highlightCompletedText(0);
     }
     
