@@ -23,9 +23,9 @@ public class Order extends JPanel {
 	private final JLabel lblDriverName = new JLabel("Driver Name");
 	private final JLabel lblBrickType = new JLabel("Brick Type");
 	private final JTextField txtVoucherNo = new JTextField();
-	private final JComboBox cmbVechile = new JComboBox();
-	private final JComboBox comboBox_driver = new JComboBox();
-	private final JComboBox comboBox_brick_type = new JComboBox();
+	private final JComboBox<String> cmbVechile = new JComboBox<String>();
+	private final JComboBox<String> comboBox_driver = new JComboBox<String>();
+	private final JComboBox<String> comboBox_brick_type = new JComboBox<String>();
 	private final JCheckBox chckbxHalf = new JCheckBox("Half");
 	private final JTextField txtHalfBrickAmount = new JTextField();
 

@@ -88,7 +88,7 @@ public class AutoCompletion extends PlainDocument {
     
     public static void enable(JComboBox comboBox) {
         // has to be editable
-        comboBox.setEditable(true);
+       // comboBox.setEditable(true);
         // change the editor's document
         new AutoCompletion(comboBox);
     }

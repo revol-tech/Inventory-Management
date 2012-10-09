@@ -1,6 +1,8 @@
 package com.brick.panel;
 
 import java.awt.Dimension;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,6 +15,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 import com.brick.database.DatabaseHelper;
 
@@ -23,16 +26,15 @@ public class NewUser extends JPanel {
 	private JPasswordField txtPassword, txtCPassword;
 	private JTextField txtUsername, txtName;
 	private JButton btnSave, btnCancel;
-	JPanel panelNewUser;
 
 	Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
 
 	public NewUser() {
 
-		this.setSize(350, 270);
-		this.setLocation((screen.width - 500) / 2, ((screen.height - 350) / 2));
-		this.setLayout(null);
-		panelNewUser= this;
+		//this.setSize(350, 270);
+	//	this.setLocation((screen.width - 500) / 2, ((screen.height - 350) / 2));
+		this.setLayout(new GridLayout());
+
 		lblUsername = new JLabel("Username");
 		lblPassword = new JLabel("Password");
 		lblConfirmMsg = new JLabel("Re-enter Password");
@@ -45,21 +47,21 @@ public class NewUser extends JPanel {
 		btnCancel = new JButton("Cancel");
 
 		lblUsername.setBounds(30, 30, 100, 25);
-		this.add(lblUsername);
+		this.add(lblUsername,SwingUtilities.CENTER);
 		txtUsername.setBounds(150, 30, 150, 25);
-		this.add(txtUsername);
+		this.add(txtUsername,SwingUtilities.CENTER);
 		lblPassword.setBounds(30, 70, 100, 25);
-		this.add(lblPassword);
+		this.add(lblPassword,SwingUtilities.CENTER);
 		txtPassword.setBounds(150, 70, 150, 25);
-		this.add(txtPassword);
+		this.add(txtPassword,SwingUtilities.CENTER);
 		lblConfirmMsg.setBounds(30, 110, 110, 25);
-		this.add(lblConfirmMsg);
+		this.add(lblConfirmMsg,SwingUtilities.CENTER);
 		txtCPassword.setBounds(150, 110, 150, 25);
-		this.add(txtCPassword);
+		this.add(txtCPassword,SwingUtilities.CENTER);
 		btnSave.setBounds(60, 155, 100, 25);
-		this.add(btnSave);
+		this.add(btnSave,SwingUtilities.CENTER);
 		btnCancel.setBounds(180, 155, 100, 25);
-		this.add(btnCancel);
+		this.add(btnCancel,SwingUtilities.CENTER);
 
 		txtName.addKeyListener(new KeyAdapter() {
 
@@ -87,18 +89,9 @@ public class NewUser extends JPanel {
 				}
 			}
 		});
-		btnCancel.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				resetField();
-				panelNewUser.setVisible(false);
-			System.out.println("hello");
-			}
-		});
 		btnSave.addActionListener(new java.awt.event.ActionListener() {
 
-			
 			public void actionPerformed(ActionEvent e) {
-
 				DatabaseHelper databaseHelper = new DatabaseHelper();
 				if (txtUsername.getText() == null
 						|| txtUsername.getText().equals("")) {
@@ -138,22 +131,16 @@ public class NewUser extends JPanel {
 								JOptionPane.DEFAULT_OPTION);
 						
 					}
-
 				
 			}
 		});
 
-		}// constructor closed
-	
-	//action listener
-	
-	
-	public void resetField()
-	{
-		
-		txtUsername.setText("");
-		txtCPassword.setText("");
-		txtPassword.setText("");
-	}
+		btnCancel.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				// dispose();
+			}
+		});
+	}// constructor closed
 }// class closed
 
