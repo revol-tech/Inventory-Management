@@ -3,7 +3,6 @@ package com.brick.helper;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.text.*;
-import javax.swing.text.html.HTMLDocument.HTMLReader.IsindexAction;
 
 public class AutoCompleteData extends PlainDocument {
     JComboBox comboBox;
@@ -52,15 +51,7 @@ public class AutoCompleteData extends PlainDocument {
         });
         // Handle initially selected object
         Object selected = comboBox.getSelectedItem();
-        if (selected!=null){
-        	if(selected instanceof LaborHelper){
-        		setText(((LaborHelper)selected).name);
-        	}else if(selected instanceof VehicleInfo){
-        		setText(((VehicleInfo)selected).vechileNo);
-        	}
-        }
-        	
-        	
+        if (selected!=null) setText(((LaborHelper)selected).name);
         highlightCompletedText(0);
     }
     
