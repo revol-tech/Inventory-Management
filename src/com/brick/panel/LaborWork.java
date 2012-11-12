@@ -1,115 +1,389 @@
 package com.brick.panel;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
-import javax.swing.ComboBoxEditor;
+import javax.swing.BoxLayout;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
 import javax.swing.plaf.basic.BasicComboBoxEditor;
 
 import com.brick.database.DatabaseHelper;
-import com.brick.helper.AutoCompleteData;
-import com.brick.helper.AutoCompletion;
 import com.brick.helper.LaborHelper;
 
 public class LaborWork extends JPanel {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	DatabaseHelper databasehelper = new DatabaseHelper();
 	String[] labortype = { "", "Madeshi", "Bokenya", "Patheri" };
-
-	private final JLabel lblLaborName = new JLabel("Labor Name");
 	private final JLabel lblLaborType = new JLabel("Labor Type");
 	private final JComboBox<LaborHelper> labourname = new JComboBox<LaborHelper>();
-	
-	private final JComboBox comboBox = new JComboBox(labortype);
-	private final JPanel patheri = new JPanel();
-	private final JLabel lblBrickAmount = new JLabel("Brick Amount");
-	private final JTextField textField_1 = new JTextField();
-	private final JPanel madhesi = new JPanel();
-	private final JLabel label = new JLabel("Distance A");
-	private final JLabel label_1 = new JLabel("Distance B");
-	private final JLabel label_2 = new JLabel("Distance C");
-	private final JTextField textField_5 = new JTextField();
 
-	private final JTextField textField_6 = new JTextField();
-	private final JTextField textField_7 = new JTextField();
-	private final JTextField textField_8 = new JTextField();
-	private final JTextField textField_9 = new JTextField();
-	private final JTextField textField_10 = new JTextField();
-	private final JLabel label_3 = new JLabel("Brick A(Transaction)");
-	private final JLabel label_4 = new JLabel("Brick B(Transaction)");
+	private final JComboBox comboBoxLaborType = new JComboBox(labortype);
+	private final JPanel patheri = new JPanel();
+	private final JPanel madhesi = new JPanel();
 	private final JPanel bokenya = new JPanel();
 	private final JLabel label_5 = new JLabel("Distance A");
 	private final JLabel label_6 = new JLabel("Distance B");
 	private final JLabel label_7 = new JLabel("Distance C");
-	private final JTextField textField_2 = new JTextField();
-	private final JTextField textField_3 = new JTextField();
-	private final JTextField textField_4 = new JTextField();
-	private final JLabel label_8 = new JLabel("Transaction");
+	private final JTextField txtDistanceA = new JTextField();
+	private final JTextField txtDistanceB = new JTextField();
+	private final JTextField txtDistanceC = new JTextField();
 	private final JButton btnSubmit = new JButton("Submit");
-	private final JButton btnCancle = new JButton("Cancel");
+	private final JPanel panel = new JPanel();
+	private final JPanel panel_1 = new JPanel();
+	private final JPanel panel_2 = new JPanel();
+	private final JPanel panel_3 = new JPanel();
+	private final JButton button = new JButton("");
+	private final JLabel label = new JLabel("Transaction");
+	private final JLabel lblBrickA = new JLabel("Brick A");
+	private final JLabel lblBrickB = new JLabel("Brick B");
+	private final JLabel label_3 = new JLabel("Distance A");
+	private final JTextField txtBrickADistanceA = new JTextField();
+	private final JTextField txtBrickBDistanceA = new JTextField();
+	private final JLabel label_4 = new JLabel("Distance B");
+	private final JTextField txtBrickADistanceB = new JTextField();
+	private final JTextField txtBrickBDistanceB = new JTextField();
+	private final JLabel label_8 = new JLabel("Distance C");
+	private final JTextField txtBrickADistanceC = new JTextField();
+	private final JTextField txtBrickBDistanceC = new JTextField();
+	private final JTextField txtBrickAmount = new JTextField();
+	private final JLabel lblLaborName = new JLabel("Labor Name");
+	private final JLabel label_9 = new JLabel("Brick Amount");
+	private final JLabel lblLaborWorkEntry = new JLabel("Labor Work Entry");
+	private JPanel panelLabourWork;
+	private String currentSelected;
 
 	/**
-	 * Create the panel.new 
+	 * Create the panel.new
 	 */
 	public LaborWork() {
-		textField_1.setBounds(142, 20, 145, 19);
-		textField_1.setColumns(10);
-		labourname.setBounds(239, 65, 146, 19);
+		panelLabourWork = this;
+		GridBagLayout gbl_panel = new GridBagLayout();
+		gbl_panel.columnWidths = new int[] { 140, 287, 0, 0, 0 };
+		gbl_panel.rowHeights = new int[] { 45, 45, 0, 0, 80, 0, 0 };
+		// gbl_panel.columnWidths = new int[]{156, 124, 105, 79, 41, 43, 35, 81,
+		// 0};
+		// gbl_panel.rowHeights = new int[]{34, 44, 120, 0, 0, 0, 53, 0};
+		gbl_panel.columnWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0 };
+		gbl_panel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
+		panel.setLayout(gbl_panel);
+		GridBagConstraints gbc_lblLaborName = new GridBagConstraints();
+		gbc_lblLaborName.anchor = GridBagConstraints.WEST;
+		gbc_lblLaborName.insets = new Insets(0, 0, 5, 5);
+		gbc_lblLaborName.gridx = 0;
+		gbc_lblLaborName.gridy = 0;
+		lblLaborName.setFont(new Font("Dialog", Font.BOLD, 14));
+		panel.add(lblLaborName, gbc_lblLaborName);
+		GridBagConstraints gbc_labourname = new GridBagConstraints();
+		gbc_labourname.fill = GridBagConstraints.BOTH;
+		gbc_labourname.insets = new Insets(7, 0, 7, 5);
+		gbc_labourname.gridx = 1;
+		gbc_labourname.gridy = 0;
+		labourname.setFont(new Font("Dialog", Font.BOLD, 14));
+		panel.add(labourname, gbc_labourname);
+
+		// AutoCompletion.enable(labourname);
+		// new AutoCompleteData(labourname);
+		GridBagConstraints gbc_lblLaborType = new GridBagConstraints();
+		gbc_lblLaborType.anchor = GridBagConstraints.WEST;
+		gbc_lblLaborType.insets = new Insets(0, 0, 5, 5);
+		gbc_lblLaborType.gridx = 0;
+		gbc_lblLaborType.gridy = 1;
+		lblLaborType.setFont(new Font("Dialog", Font.BOLD, 14));
+		panel.add(lblLaborType, gbc_lblLaborType);
+		GridBagConstraints gbc_comboBoxLaborType = new GridBagConstraints();
+		gbc_comboBoxLaborType.fill = GridBagConstraints.BOTH;
+		gbc_comboBoxLaborType.insets = new Insets(7, 0, 7, 5);
+		gbc_comboBoxLaborType.gridx = 1;
+		gbc_comboBoxLaborType.gridy = 1;
+		comboBoxLaborType.setFont(new Font("Dialog", Font.BOLD, 14));
+		panel.add(comboBoxLaborType, gbc_comboBoxLaborType);
+		GridBagConstraints gbc_patheri = new GridBagConstraints();
+		gbc_patheri.gridwidth = 5;
+		gbc_patheri.anchor = GridBagConstraints.WEST;
+		gbc_patheri.insets = new Insets(20, 0, 20, 5);
+		gbc_patheri.gridx = 0;
+		gbc_patheri.gridy = 2;
+		panel.add(patheri, gbc_patheri);
+		GridBagConstraints gbc_bokenya = new GridBagConstraints();
+		gbc_bokenya.gridwidth = 5;
+		gbc_bokenya.anchor = GridBagConstraints.WEST;
+		gbc_bokenya.insets = new Insets(20, 0, 20, 5);
+		gbc_bokenya.gridx = 0;
+		gbc_bokenya.gridy = 2;
+		panel.add(bokenya, gbc_bokenya);
+		GridBagLayout gbl_madhesi = new GridBagLayout();
+		gbl_madhesi.columnWidths = new int[] { 140, 140, 143, 0 };
+		gbl_madhesi.rowHeights = new int[] { 45, 45, 45, 45, 0 };
+		gbl_madhesi.columnWeights = new double[] { 0.0, 1.0, 1.0,
+				Double.MIN_VALUE };
+		gbl_madhesi.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0,
+				Double.MIN_VALUE };
+		GridBagConstraints gbc_madhesi = new GridBagConstraints();
+		gbc_madhesi.gridheight = 2;
+		gbc_madhesi.anchor = GridBagConstraints.NORTHWEST;
+		gbc_madhesi.insets = new Insets(0, 0, 5, 5);
+		gbc_madhesi.gridwidth = 5;
+		gbc_madhesi.gridx = 0;
+		gbc_madhesi.gridy = 2;
+		panel.add(madhesi, gbc_madhesi);
+		madhesi.setLayout(gbl_madhesi);
+
+		GridBagConstraints gbc_label = new GridBagConstraints();
+		gbc_label.anchor = GridBagConstraints.SOUTHWEST;
+		gbc_label.insets = new Insets(0, 0, 5, 5);
+		gbc_label.gridx = 0;
+		gbc_label.gridy = 0;
+		label.setFont(new Font("Dialog", Font.BOLD, 14));
+		madhesi.add(label, gbc_label);
+
+		GridBagConstraints gbc_lblBrickA = new GridBagConstraints();
+		gbc_lblBrickA.anchor = GridBagConstraints.SOUTH;
+		gbc_lblBrickA.insets = new Insets(0, 0, 5, 10);
+		gbc_lblBrickA.gridx = 1;
+		gbc_lblBrickA.gridy = 0;
+		lblBrickA.setFont(new Font("Dialog", Font.BOLD, 14));
+		madhesi.add(lblBrickA, gbc_lblBrickA);
+
+		GridBagConstraints gbc_lblBrickB = new GridBagConstraints();
+		gbc_lblBrickB.anchor = GridBagConstraints.SOUTH;
+		gbc_lblBrickB.insets = new Insets(0, 0, 5, 0);
+		gbc_lblBrickB.gridx = 2;
+		gbc_lblBrickB.gridy = 0;
+		lblBrickB.setFont(new Font("Dialog", Font.BOLD, 14));
+		madhesi.add(lblBrickB, gbc_lblBrickB);
+
+		GridBagConstraints gbc_label_3 = new GridBagConstraints();
+		gbc_label_3.anchor = GridBagConstraints.WEST;
+		gbc_label_3.insets = new Insets(0, 0, 5, 5);
+		gbc_label_3.gridx = 0;
+		gbc_label_3.gridy = 1;
+		label_3.setFont(new Font("Dialog", Font.BOLD, 14));
+		madhesi.add(label_3, gbc_label_3);
+
+		GridBagConstraints gbc_txtBrickADistanceA = new GridBagConstraints();
+		gbc_txtBrickADistanceA.fill = GridBagConstraints.BOTH;
+		gbc_txtBrickADistanceA.insets = new Insets(7, 0, 7, 5);
+		gbc_txtBrickADistanceA.gridx = 1;
+		gbc_txtBrickADistanceA.gridy = 1;
+		txtBrickADistanceA.setColumns(10);
+		madhesi.add(txtBrickADistanceA, gbc_txtBrickADistanceA);
+
+		GridBagConstraints gbc_txtBrickBDistanceA = new GridBagConstraints();
+		gbc_txtBrickBDistanceA.fill = GridBagConstraints.BOTH;
+		gbc_txtBrickBDistanceA.insets = new Insets(7, 10, 7, 0);
+		gbc_txtBrickBDistanceA.gridx = 2;
+		gbc_txtBrickBDistanceA.gridy = 1;
+		txtBrickBDistanceA.setColumns(10);
+		madhesi.add(txtBrickBDistanceA, gbc_txtBrickBDistanceA);
+
+		GridBagConstraints gbc_label_4 = new GridBagConstraints();
+		gbc_label_4.anchor = GridBagConstraints.WEST;
+		gbc_label_4.insets = new Insets(0, 0, 5, 5);
+		gbc_label_4.gridx = 0;
+		gbc_label_4.gridy = 2;
+		label_4.setFont(new Font("Dialog", Font.BOLD, 14));
+		madhesi.add(label_4, gbc_label_4);
+
+		GridBagConstraints gbc_txtBrickADistanceB = new GridBagConstraints();
+		gbc_txtBrickADistanceB.fill = GridBagConstraints.BOTH;
+		gbc_txtBrickADistanceB.insets = new Insets(7, 0, 7, 5);
+		gbc_txtBrickADistanceB.gridx = 1;
+		gbc_txtBrickADistanceB.gridy = 2;
+		txtBrickADistanceB.setColumns(10);
+		madhesi.add(txtBrickADistanceB, gbc_txtBrickADistanceB);
+
+		GridBagConstraints gbc_txtBrickBDistanceB = new GridBagConstraints();
+		gbc_txtBrickBDistanceB.fill = GridBagConstraints.BOTH;
+		gbc_txtBrickBDistanceB.insets = new Insets(7, 10, 7, 0);
+		gbc_txtBrickBDistanceB.gridx = 2;
+		gbc_txtBrickBDistanceB.gridy = 2;
+		txtBrickBDistanceB.setColumns(10);
+		madhesi.add(txtBrickBDistanceB, gbc_txtBrickBDistanceB);
+
+		GridBagConstraints gbc_label_8 = new GridBagConstraints();
+		gbc_label_8.anchor = GridBagConstraints.WEST;
+		gbc_label_8.insets = new Insets(0, 0, 0, 5);
+		gbc_label_8.gridx = 0;
+		gbc_label_8.gridy = 3;
+		label_8.setFont(new Font("Dialog", Font.BOLD, 14));
+		madhesi.add(label_8, gbc_label_8);
+
+		GridBagConstraints gbc_txtBrickADistanceC = new GridBagConstraints();
+		gbc_txtBrickADistanceC.fill = GridBagConstraints.BOTH;
+		gbc_txtBrickADistanceC.insets = new Insets(7, 0, 7, 5);
+		gbc_txtBrickADistanceC.gridx = 1;
+		gbc_txtBrickADistanceC.gridy = 3;
+		txtBrickADistanceC.setColumns(10);
+		madhesi.add(txtBrickADistanceC, gbc_txtBrickADistanceC);
+
+		GridBagConstraints gbc_txtBrickBDistanceC = new GridBagConstraints();
+		gbc_txtBrickBDistanceC.insets = new Insets(7, 10, 7, 0);
+		gbc_txtBrickBDistanceC.fill = GridBagConstraints.BOTH;
+		gbc_txtBrickBDistanceC.gridx = 2;
+		gbc_txtBrickBDistanceC.gridy = 3;
+		txtBrickBDistanceC.setColumns(10);
+		madhesi.add(txtBrickBDistanceC, gbc_txtBrickBDistanceC);
+		GridBagConstraints gbc_btnSubmit = new GridBagConstraints();
+		gbc_btnSubmit.fill = GridBagConstraints.HORIZONTAL;
+		gbc_btnSubmit.gridwidth = 2;
+		gbc_btnSubmit.anchor = GridBagConstraints.SOUTH;
+		gbc_btnSubmit.insets = new Insets(0, 100, 0, 100);
+		gbc_btnSubmit.gridx = 0;
+		gbc_btnSubmit.gridy = 4;
+		panel.add(btnSubmit, gbc_btnSubmit);
 		ArrayList<LaborHelper> list = new ArrayList<LaborHelper>();
 		list = databasehelper.fetchLaborName();
-		/*
-		 * for (LaborHelper laborHelper : list) {
-		 * 
-		 * labourname.addItem(laborHelper); }
-		 */
-		for (LaborHelper laborHelper1 : list) {
-			System.out.println(laborHelper1.name);
-			labourname.addItem(laborHelper1);
+
+		for (LaborHelper laborHelper : list) {
+
+			labourname.addItem(laborHelper);
 		}
+
 		labourname.setEditor(new searchComboBoxEditor());
 		labourname.setRenderer(new MyListRender());
 		labourname.setEditable(true);
-		
-		//AutoCompletion.enable(labourname);
-		new AutoCompleteData(labourname);
 		initGUI();
+		btnSubmit.addActionListener(new ButtonListener());
+		button.addActionListener(new ButtonListener());
 
 	}
 
 	private void initGUI() {
-		setLayout(null);
-		// this.setSize(JFrame.MAXIMIZED_BOTH);
-		lblLaborName.setBounds(99, 67, 109, 15);
+		setLayout(new BorderLayout(0, 0));
+		add(panel_1, BorderLayout.NORTH);
+		panel_1.setLayout(new BoxLayout(panel_1, BoxLayout.X_AXIS));
+		FlowLayout flowLayout = (FlowLayout) panel_2.getLayout();
+		flowLayout.setAlignment(FlowLayout.RIGHT);
+		panel_2.setBackground(Color.GRAY);
 
-		add(lblLaborName);
-		lblLaborType.setBounds(99, 120, 109, 15);
+		panel_1.add(panel_2);
+		lblLaborWorkEntry.setForeground(new Color(0, 191, 255));
+		lblLaborWorkEntry.setFont(new Font("Dialog", Font.BOLD, 16));
 
-		add(lblLaborType);
+		panel_2.add(lblLaborWorkEntry);
+		FlowLayout flowLayout_1 = (FlowLayout) panel_3.getLayout();
+		flowLayout_1.setAlignment(FlowLayout.RIGHT);
+		panel_3.setBackground(Color.GRAY);
 
-		add(labourname);
-		comboBox.addActionListener(new ActionListener() {
+		panel_1.add(panel_3);
+		button.setIcon(new ImageIcon("images/exit.png"));
+
+		panel_3.add(button);
+		add(panel, BorderLayout.CENTER);
+		GridBagLayout gbl_bokenya = new GridBagLayout();
+		gbl_bokenya.columnWidths = new int[] { 140, 287, 0 };
+		gbl_bokenya.rowHeights = new int[] { 45, 45, 45, 0 };
+		gbl_bokenya.columnWeights = new double[] { 0.0, 0.0, Double.MIN_VALUE };
+		gbl_bokenya.rowWeights = new double[] { 0.0, 0.0, 0.0, Double.MIN_VALUE };
+		bokenya.setLayout(gbl_bokenya);
+		GridBagConstraints gbc_label_5 = new GridBagConstraints();
+		gbc_label_5.anchor = GridBagConstraints.WEST;
+		gbc_label_5.insets = new Insets(0, 0, 5, 0);
+		gbc_label_5.gridx = 0;
+		gbc_label_5.gridy = 0;
+		label_5.setFont(new Font("Dialog", Font.BOLD, 14));
+		bokenya.add(label_5, gbc_label_5);
+		GridBagConstraints gbc_txtDistanceA = new GridBagConstraints();
+		gbc_txtDistanceA.fill = GridBagConstraints.BOTH;
+		gbc_txtDistanceA.insets = new Insets(7, 0, 7, 0);
+		gbc_txtDistanceA.gridx = 1;
+		gbc_txtDistanceA.gridy = 0;
+		txtDistanceA.setFont(new Font("Dialog", Font.PLAIN, 14));
+		bokenya.add(txtDistanceA, gbc_txtDistanceA);
+		txtDistanceA.setColumns(10);
+		GridBagConstraints gbc_label_6 = new GridBagConstraints();
+		gbc_label_6.anchor = GridBagConstraints.WEST;
+		gbc_label_6.insets = new Insets(0, 0, 5, 0);
+		gbc_label_6.gridx = 0;
+		gbc_label_6.gridy = 1;
+		label_6.setFont(new Font("Dialog", Font.BOLD, 14));
+		bokenya.add(label_6, gbc_label_6);
+		GridBagConstraints gbc_txtDistanceB = new GridBagConstraints();
+		gbc_txtDistanceB.fill = GridBagConstraints.BOTH;
+		gbc_txtDistanceB.insets = new Insets(7, 0, 7, 0);
+		gbc_txtDistanceB.gridx = 1;
+		gbc_txtDistanceB.gridy = 1;
+		txtDistanceB.setFont(new Font("Dialog", Font.PLAIN, 14));
+		bokenya.add(txtDistanceB, gbc_txtDistanceB);
+		txtDistanceB.setColumns(10);
+		GridBagConstraints gbc_label_7 = new GridBagConstraints();
+		gbc_label_7.anchor = GridBagConstraints.WEST;
+		gbc_label_7.gridx = 0;
+		gbc_label_7.gridy = 2;
+		label_7.setFont(new Font("Dialog", Font.BOLD, 14));
+		bokenya.add(label_7, gbc_label_7);
+		GridBagConstraints gbc_txtDistanceC = new GridBagConstraints();
+		gbc_txtDistanceC.insets = new Insets(7, 0, 7, 0);
+		gbc_txtDistanceC.fill = GridBagConstraints.BOTH;
+		gbc_txtDistanceC.gridx = 1;
+		gbc_txtDistanceC.gridy = 2;
+		bokenya.add(txtDistanceC, gbc_txtDistanceC);
+		txtDistanceC.setColumns(10);
+		GridBagLayout gbl_patheri = new GridBagLayout();
+		gbl_patheri.columnWidths = new int[] { 140, 287, 0 };
+		gbl_patheri.rowHeights = new int[] { 45, 0 };
+		gbl_patheri.columnWeights = new double[] { 0.0, 0.0, Double.MIN_VALUE };
+		gbl_patheri.rowWeights = new double[] { 0.0, Double.MIN_VALUE };
+		patheri.setLayout(gbl_patheri);
+		GridBagConstraints gbc_label_9 = new GridBagConstraints();
+		gbc_label_9.anchor = GridBagConstraints.WEST;
+		gbc_label_9.insets = new Insets(0, 0, 0, 5);
+		gbc_label_9.gridx = 0;
+		gbc_label_9.gridy = 0;
+		label_9.setFont(new Font("Dialog", Font.BOLD, 14));
+		patheri.add(label_9, gbc_label_9);
+		txtBrickAmount.setFont(new Font("Dialog", Font.PLAIN, 14));
+		txtBrickAmount.setColumns(10);
+		GridBagConstraints gbc_txtBrickAmount = new GridBagConstraints();
+		gbc_txtBrickAmount.insets = new Insets(7, 0, 7, 0);
+		gbc_txtBrickAmount.fill = GridBagConstraints.BOTH;
+		gbc_txtBrickAmount.gridx = 1;
+		gbc_txtBrickAmount.gridy = 0;
+		patheri.add(txtBrickAmount, gbc_txtBrickAmount);
+
+		madhesi.setVisible(false);
+		patheri.setVisible(false);
+		bokenya.setVisible(false);
+		comboBoxLaborType.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				String name = comboBox.getSelectedItem().toString();
-				if (name == "Bokenya") {
+				currentSelected = comboBoxLaborType.getSelectedItem()
+						.toString();
+				if (currentSelected == "Bokenya") {
 					patheri.setVisible(false);
 					madhesi.setVisible(false);
 					bokenya.setVisible(true);
-				} else if (name == "Madeshi") {
+				} else if (currentSelected == "Madeshi") {
 
 					patheri.setVisible(false);
 					bokenya.setVisible(false);
 					madhesi.setVisible(true);
 
-				} else if (name == "Patheri") {
+				} else if (currentSelected == "Patheri") {
 
 					bokenya.setVisible(false);
 					madhesi.setVisible(false);
@@ -124,107 +398,11 @@ public class LaborWork extends JPanel {
 
 			}
 		});
-		madhesi.setLayout(null);
-		madhesi.setBounds(99, 161, 439, 137);
-
-		add(madhesi);
-		label.setBounds(0, 28, 91, 15);
-
-		madhesi.add(label);
-		label_1.setBounds(0, 66, 91, 15);
-
-		madhesi.add(label_1);
-		label_2.setBounds(0, 103, 91, 15);
-
-		madhesi.add(label_2);
-		textField_5.setColumns(10);
-		textField_5.setBounds(109, 26, 114, 19);
-
-		madhesi.add(textField_5);
-		textField_6.setColumns(10);
-		textField_6.setBounds(285, 24, 114, 19);
-
-		madhesi.add(textField_6);
-		textField_7.setColumns(10);
-		textField_7.setBounds(109, 64, 114, 19);
-
-		madhesi.add(textField_7);
-		textField_8.setColumns(10);
-		textField_8.setBounds(285, 62, 114, 19);
-
-		madhesi.add(textField_8);
-		textField_9.setColumns(10);
-		textField_9.setBounds(109, 101, 114, 19);
-
-		madhesi.add(textField_9);
-		textField_10.setColumns(10);
-		textField_10.setBounds(285, 99, 114, 19);
-
-		madhesi.add(textField_10);
-		label_3.setBounds(100, -1, 147, 15);
-
-		madhesi.add(label_3);
-		label_4.setBounds(271, -1, 141, 15);
-
-		madhesi.add(label_4);
-		comboBox.setBounds(239, 115, 147, 24);
-
-		add(comboBox);
-		patheri.setBounds(99, 161, 312, 80);
-
-		add(patheri);
-		patheri.setLayout(null);
-		lblBrickAmount.setBounds(0, 22, 107, 15);
-
-		patheri.add(lblBrickAmount);
-
-		patheri.add(textField_1);
-		bokenya.setLayout(null);
-		bokenya.setBounds(99, 161, 459, 180);
-
-		add(bokenya);
-		label_5.setBounds(0, 35, 112, 15);
-
-		bokenya.add(label_5);
-		label_6.setBounds(0, 71, 112, 15);
-
-		bokenya.add(label_6);
-		label_7.setBounds(0, 107, 112, 15);
-
-		bokenya.add(label_7);
-		textField_2.setColumns(10);
-		textField_2.setBounds(146, 33, 143, 19);
-
-		bokenya.add(textField_2);
-		textField_3.setColumns(10);
-		textField_3.setBounds(145, 69, 144, 19);
-
-		bokenya.add(textField_3);
-		textField_4.setColumns(10);
-		textField_4.setBounds(146, 105, 143, 19);
-
-		bokenya.add(textField_4);
-		label_8.setBounds(172, 6, 117, 15);
-
-		bokenya.add(label_8);
-		btnSubmit.setBounds(99, 385, 117, 25);
-
-		add(btnSubmit);
-		btnCancle.setBounds(258, 385, 117, 25);
-
-		add(btnCancle);
-
-		madhesi.setVisible(false);
-		patheri.setVisible(false);
-		bokenya.setVisible(false);
 	}
 
 	public class MyListRender extends JLabel implements
 			ListCellRenderer<Object> {
 
-		/**
- * 
- */
 		private static final long serialVersionUID = 1L;
 
 		@Override
@@ -232,38 +410,359 @@ public class LaborWork extends JPanel {
 				JList<? extends Object> list, Object value, int index,
 				boolean isSelected, boolean cellHasFocus) {
 			LaborHelper tt = (LaborHelper) value;
-			
-			
+
 			setText(tt.name);
 			return this;
 		}
 
 	}
+
 	class searchComboBoxEditor extends BasicComboBoxEditor {
 
-        public searchComboBoxEditor() {
-            super();
-        }
+		public searchComboBoxEditor() {
+			super();
+		}
 
-        @Override
-        public void setItem(Object anObject) {
-            if (anObject == null) {
-                super.setItem("");
-            } else {
-            	if(anObject instanceof LaborHelper){
-                LaborHelper o = (LaborHelper)anObject;
-                System.out.print("m"+o.name);
-                super.setItem(o.name);
-            	}else if(anObject instanceof String){
-            		super.setItem(anObject);
-            	}
-            }
-        }
+		@Override
+		public void setItem(Object anObject) {
 
-        @Override
-        public Object getItem() {
-            return new LaborHelper();
-        }
-    }
-	
+			if (anObject instanceof LaborHelper) {
+				LaborHelper o = (LaborHelper) anObject;
+				super.setItem(o.name);
+			} else if (anObject instanceof String) {
+				super.setItem(anObject);
+			}
+
+		}
+
+		@Override
+		public Object getItem() {
+			return new LaborHelper();
+		}
+	}
+
+	private class ButtonListener implements ActionListener {
+		DatabaseHelper databaseHelper = new DatabaseHelper();
+
+		public void actionPerformed(ActionEvent e) {
+			if (e.getSource() == btnSubmit) {
+				boolean result = false;
+				currentSelected = comboBoxLaborType.getSelectedItem()
+						.toString();
+				if (comboBoxLaborType.getSelectedItem().toString().equals("")) {
+					JOptionPane.showMessageDialog(null,
+							"Labour type is missing", "Missing field",
+							JOptionPane.DEFAULT_OPTION);
+					comboBoxLaborType.requestFocus();
+					return;
+				}
+				String numToken = "[\\p{Digit}]+";
+
+				if (currentSelected.equals("Bokenya")) {
+
+					if (!txtDistanceA.getText().toString().trim().equals("")
+							&& txtDistanceA.getText().toString()
+									.matches(numToken))
+
+					{
+						result = true;
+					}
+					if (!txtDistanceB.getText().toString().trim().equals("")
+							&& txtDistanceB.getText().toString()
+									.matches(numToken)) {
+
+						result = true;
+
+					}
+					if (!txtDistanceC.getText().toString().trim().equals("")
+							&& txtDistanceC.getText().toString()
+									.matches(numToken)) {
+
+						result = true;
+
+					}
+					if (!result) {
+						JOptionPane
+								.showMessageDialog(
+										null,
+										"At least one of the field should be filled and should be Number",
+										"Missing field",
+										JOptionPane.DEFAULT_OPTION);
+						txtDistanceA.requestFocus();
+						return;
+					}
+				} else if (currentSelected.equals("Madeshi")) {
+					result = false;
+					if (!txtBrickADistanceA.getText().toString().trim()
+							.equals("")
+							&& txtBrickADistanceA.getText().toString()
+									.matches(numToken)) {
+
+						result = true;
+					}
+					if (!txtBrickADistanceB.getText().toString().trim()
+							.equals("")
+							&& txtBrickADistanceB.getText().toString()
+									.matches(numToken)) {
+
+						result = true;
+
+					}
+					if (!txtBrickADistanceC.getText().toString().trim()
+							.equals("")
+							&& txtBrickADistanceC.getText().toString()
+									.matches(numToken)) {
+
+						result = true;
+
+					}
+					if (!txtBrickBDistanceA.getText().toString().trim()
+							.equals("")
+							&& txtBrickBDistanceA.getText().toString()
+									.matches(numToken)) {
+
+						result = true;
+					}
+					if (!txtBrickBDistanceB.getText().toString().trim()
+							.equals("")
+							&& txtBrickBDistanceB.getText().toString()
+									.matches(numToken)) {
+
+						result = true;
+
+					}
+					if (!txtBrickBDistanceC.getText().toString().trim()
+							.equals("")
+							&& txtBrickBDistanceC.getText().toString()
+									.matches(numToken)) {
+
+						result = true;
+
+					}
+					if (!txtBrickADistanceC.getText().toString().trim()
+							.equals("")
+							&& txtBrickADistanceC.getText().toString()
+									.matches(numToken)) {
+
+						result = true;
+					}
+					if (!txtBrickBDistanceC.getText().toString().trim()
+							.equals("")
+							&& txtBrickBDistanceC.getText().toString()
+									.matches(numToken)) {
+
+						result = true;
+
+					}
+					if (!txtBrickBDistanceC.getText().toString().trim()
+							.equals("")
+							&& txtBrickBDistanceC.getText().toString()
+									.matches(numToken)) {
+
+						result = true;
+
+					}
+
+					if (!result) {
+						JOptionPane
+								.showMessageDialog(
+										null,
+										"At least one of the field should be filled and should be Number",
+										"Missing field",
+										JOptionPane.DEFAULT_OPTION);
+						txtDistanceA.requestFocus();
+						return;
+					}
+				} else if (currentSelected.equals("Patheri")) {
+					System.out.println("456");
+
+					if (txtBrickAmount.getText().toString().trim().equals("")
+							&& !txtBrickAmount.getText().toString().trim()
+									.matches(numToken)) {
+						JOptionPane.showMessageDialog(null,
+								"Enter Brick Amount", "Missing field",
+								JOptionPane.DEFAULT_OPTION);
+						txtBrickAmount.requestFocus();
+						System.out.println("123");
+						return;
+					}
+				}
+
+				saveData(currentSelected);
+
+			} else if (e.getSource() == button) {
+				panelLabourWork.setVisible(false);
+			}
+		}
+	}
+
+	public void saveData(String currLabourType) {
+		// login here
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		Date date = new Date();
+		String currentDate = dateFormat.format(date);
+		System.out.print(currentDate);
+
+		if (currentSelected.equals("Patheri")) {
+			int labourId = ((LaborHelper) labourname.getSelectedItem()).id;
+			int noOfBrick = Integer.valueOf(txtBrickAmount.getText().toString()
+					.trim());
+			float rate = databasehelper.getRate("patheri", 1);
+			float amount = noOfBrick * rate;
+			if (databasehelper.insertWorkEntry(labourId, -1, noOfBrick, amount,
+					currentDate) > 0) {
+
+				JOptionPane.showMessageDialog(null,
+						"successfuly added Labour work", "",
+						JOptionPane.DEFAULT_OPTION);
+				resetField();
+
+			} else {
+				JOptionPane.showMessageDialog(null,
+						"Database connection error", "",
+						JOptionPane.DEFAULT_OPTION);
+
+			}
+		} else if (currentSelected.equals("Bokenya")) {
+			int result = -1;
+
+			if (!txtDistanceA.getText().toString().trim().equals("")) {
+				int labourId = ((LaborHelper) labourname.getSelectedItem()).id;
+				int noOfBrick = Integer.valueOf(txtDistanceA.getText()
+						.toString().trim());
+				float rate = databasehelper.getRate("Red Coin", 1);
+				float amount = noOfBrick * rate;
+				result = databasehelper.insertWorkEntry(labourId, 1, noOfBrick,
+						amount, currentDate);
+			}
+			if (!txtDistanceB.getText().toString().trim().equals("")) {
+				int labourId = ((LaborHelper) labourname.getSelectedItem()).id;
+				int noOfBrick = Integer.valueOf(txtDistanceB.getText()
+						.toString().trim());
+				float rate = databasehelper.getRate("blue", 1);
+				float amount = noOfBrick * rate;
+				result = databasehelper.insertWorkEntry(labourId, 1, noOfBrick,
+						amount, currentDate);
+			}
+			if (!txtDistanceC.getText().toString().trim().equals("")) {
+				int labourId = ((LaborHelper) labourname.getSelectedItem()).id;
+				int noOfBrick = Integer.valueOf(txtDistanceC.getText()
+						.toString().trim());
+				float rate = databasehelper.getRate("yellow", 1);
+				float amount = noOfBrick * rate;
+				result = databasehelper.insertWorkEntry(labourId, 1, noOfBrick,
+						amount, currentDate);
+			}
+			if (result > 0) {
+
+				JOptionPane.showMessageDialog(null,
+						"successfuly added Labour work", "",
+						JOptionPane.DEFAULT_OPTION);
+				resetField();
+			} else {
+				JOptionPane.showMessageDialog(null,
+						"Database connection error", "",
+						JOptionPane.DEFAULT_OPTION);
+			}
+
+		} else if (currentSelected.equals("Madeshi")) {
+			int result = -1;
+			// assumption brickA-->brick_id=1
+			// brickB-->brick_id=2
+			// distanceA-->Red Coin
+			// distanceA-->blue
+			// distanceA-->yellow
+			if (!txtBrickADistanceA.getText().toString().trim().equals("")) {
+				int labourId = ((LaborHelper) labourname.getSelectedItem()).id;
+				int noOfBrick = Integer.valueOf(txtBrickADistanceA.getText()
+						.toString().trim());
+				float rate = databasehelper.getRate("Red Coin", 1);
+				float amount = noOfBrick * rate;
+				result = databasehelper.insertWorkEntry(labourId, 2, noOfBrick,
+						amount, currentDate);
+			}
+			if (!txtBrickADistanceB.getText().toString().trim().equals("")) {
+				int labourId = ((LaborHelper) labourname.getSelectedItem()).id;
+				int noOfBrick = Integer.valueOf(txtBrickADistanceB.getText()
+						.toString().trim());
+				float rate = databasehelper.getRate("blue", 1);
+				float amount = noOfBrick * rate;
+				result = databasehelper.insertWorkEntry(labourId, 2, noOfBrick,
+						amount, currentDate);
+			}
+			if (!txtBrickADistanceC.getText().toString().trim().equals("")) {
+				int labourId = ((LaborHelper) labourname.getSelectedItem()).id;
+				int noOfBrick = Integer.valueOf(txtBrickADistanceC.getText()
+						.toString().trim());
+				float rate = databasehelper.getRate("yellow", 1);
+				float amount = noOfBrick * rate;
+				result = databasehelper.insertWorkEntry(labourId, 2, noOfBrick,
+						amount, currentDate);
+			}
+			if (!txtDistanceC.getText().toString().trim().equals("")) {
+				int labourId = ((LaborHelper) labourname.getSelectedItem()).id;
+				int noOfBrick = Integer.valueOf(txtDistanceC.getText()
+						.toString().trim());
+				float rate = databasehelper.getRate("blue", 1);
+				float amount = noOfBrick * rate;
+				result = databasehelper.insertWorkEntry(labourId, 2, noOfBrick,
+						amount, currentDate);
+			}
+			if (!txtBrickBDistanceA.getText().toString().trim().equals("")) {
+				int labourId = ((LaborHelper) labourname.getSelectedItem()).id;
+				int noOfBrick = Integer.valueOf(txtBrickADistanceA.getText()
+						.toString().trim());
+				float rate = databasehelper.getRate("Red Coin", 2);
+				float amount = noOfBrick * rate;
+				result = databasehelper.insertWorkEntry(labourId, 2, noOfBrick,
+						amount, currentDate);
+			}
+			if (!txtBrickBDistanceB.getText().toString().trim().equals("")) {
+				int labourId = ((LaborHelper) labourname.getSelectedItem()).id;
+				int noOfBrick = Integer.valueOf(txtBrickADistanceB.getText()
+						.toString().trim());
+				float rate = databasehelper.getRate("blue", 2);
+				float amount = noOfBrick * rate;
+				result = databasehelper.insertWorkEntry(labourId, 2, noOfBrick,
+						amount, currentDate);
+			}
+			if (!txtBrickBDistanceC.getText().toString().trim().equals("")) {
+				int labourId = ((LaborHelper) labourname.getSelectedItem()).id;
+				int noOfBrick = Integer.valueOf(txtBrickADistanceC.getText()
+						.toString().trim());
+				float rate = databasehelper.getRate("yellow", 2);
+				float amount = noOfBrick * rate;
+				result = databasehelper.insertWorkEntry(labourId, 2, noOfBrick,
+						amount, currentDate);
+			}
+			if (result > 0) {
+
+				JOptionPane.showMessageDialog(null,
+						"successfuly added Labour work", "",
+						JOptionPane.DEFAULT_OPTION);
+				resetField();
+
+			} else {
+				JOptionPane.showMessageDialog(null,
+						"Database connection error", "",
+						JOptionPane.DEFAULT_OPTION);
+			}
+
+		}
+
+	}
+
+	public void resetField() {
+		txtBrickADistanceA.setText("");
+		txtBrickADistanceB.setText("");
+		txtBrickADistanceC.setText("");
+		txtBrickBDistanceA.setText("");
+		txtBrickBDistanceB.setText("");
+		txtBrickBDistanceC.setText("");
+		txtDistanceA.setText("");
+		txtDistanceB.setText("");
+		txtDistanceC.setText("");
+		txtBrickAmount.setText("");
+		
+	}
 }

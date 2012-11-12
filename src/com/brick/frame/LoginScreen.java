@@ -6,6 +6,7 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -32,7 +33,7 @@ public class LoginScreen extends JFrame {
 		this.setResizable(false);
 		this.setLocation((screen.width - 500) / 2, ((screen.height - 350) / 2));
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-
+		this.setIconImage(new ImageIcon("images/appicon.png").getImage());
 		lblUsername = new JLabel("Username");
 		lblPasswd = new JLabel("Password");
 		txtUser = new JTextField();
