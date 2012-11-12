@@ -29,11 +29,12 @@ import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 
 import com.brick.helper.ToolBarUtils;
+import com.brick.panel.Customer;
+import com.brick.panel.Employee;
 import com.brick.panel.Labor;
 import com.brick.panel.LaborWork;
 import com.brick.panel.NewUser;
 import com.brick.panel.NewVehicle;
-
 import com.brick.panel.Order;
 
 public class MainWindow extends JFrame implements WindowListener {
@@ -46,9 +47,11 @@ public class MainWindow extends JFrame implements WindowListener {
 	final static String ADD_ORDER = "Card with add trip";
 	final static String ADD_VEHICLE = "Card with add new vehicle";
 	final static String ADD_LABOR_WORK = "Card with Labor work";
+	final static String ADD_EMPLOYEE = "Card with Employee Entry";
+	final static String ADD_CUSTOMER = "Card with Customer Entry";
 	public JMenu mnuOperations, mnuReports, mnuHelp;
 	public JMenuItem mnuNewuser, mnuNewLabour, mnuOrder, mnuAddVehicle,
-			mnuAddLaborWork, mnuItemReport, mnuExit, menuItemAbout;
+			mnuAddLaborWork, mnuItemReport, mnuExit, menuItemAbout,mnuAddEmployee,mnuAddCustomer;
 	ToolBarUtils settings = new ToolBarUtils();
 	Dimension screen;
 	JPanel containerPanel;
@@ -99,6 +102,8 @@ public class MainWindow extends JFrame implements WindowListener {
 		NewVehicle newvehicle = new NewVehicle();
 		LaborWork laborwork = new LaborWork();
 		Labor newLabour = new Labor();
+		Employee employee = new Employee();
+		Customer customer = new Customer();
 		// Create the panel that contains the "cards".
 		cards = new JPanel();
 		cards.setLayout(new CardLayout());
@@ -108,6 +113,8 @@ public class MainWindow extends JFrame implements WindowListener {
 		cards.add(newvehicle, ADD_VEHICLE);
 		cards.add(laborwork, ADD_LABOR_WORK);
 		cards.add(newLabour, ADD_LABOUR);
+		cards.add(employee,ADD_EMPLOYEE);
+		cards.add(customer,ADD_CUSTOMER);
 
 		getContentPane().setLayout(new BorderLayout(0, 0));
 		panel_Top.setLayout(new BorderLayout(0, 0));
@@ -163,7 +170,7 @@ public class MainWindow extends JFrame implements WindowListener {
 
 	}
 
-	public void addComponentToPane(Container pane) {
+	/*public void addComponentToPane(Container pane) {
 
 		NewUser newUser = new NewUser();
 		Order order = new Order();
@@ -178,9 +185,10 @@ public class MainWindow extends JFrame implements WindowListener {
 		cards.add(order, ADD_ORDER);
 		cards.add(newvehicle, ADD_VEHICLE);
 		cards.add(laborwork, ADD_LABOR_WORK);
+		cards.add(employee,ADD_EMPLOYEE);
 
 	}
-
+*/
 	public JMenuBar CreateJMenuBar() {
 		JMenuBar menubar = new JMenuBar();
 		/********** CREATING OPERATIONS MENU ***********************/
@@ -206,7 +214,7 @@ public class MainWindow extends JFrame implements WindowListener {
 		mnuHelp.setMnemonic('O');
 
 		/*********************** menuitem ************************************/
-		mnuNewuser = new JMenuItem("AddNew User");
+		mnuNewuser = new JMenuItem("Add New User");
 		mnuNewuser.setForeground(Color.blue);
 		mnuNewuser.setFont(new Font("monospaced", Font.PLAIN, 14));
 		mnuNewuser.setMnemonic('L');
@@ -237,6 +245,29 @@ public class MainWindow extends JFrame implements WindowListener {
 				ActionEvent.CTRL_MASK));
 		mnuAddVehicle.setActionCommand("addVehicle");
 		mnuAddVehicle.addActionListener(menulistener);
+		
+		// Add Employee
+		mnuAddEmployee = new JMenuItem("Add New Employee");
+		mnuAddEmployee.setForeground(Color.blue);
+		mnuAddEmployee.setFont(new Font("monospaced", Font.PLAIN, 14));
+		mnuAddEmployee.setMnemonic('e');
+		mnuAddEmployee.setIcon(new ImageIcon("images/print.png"));
+		mnuAddEmployee.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E,
+				ActionEvent.CTRL_MASK));
+		mnuAddEmployee.setActionCommand("addEmployee");
+		mnuAddEmployee.addActionListener(menulistener);
+
+		// Add Customer
+		mnuAddCustomer = new JMenuItem("Add New Customer");
+		mnuAddCustomer.setForeground(Color.blue);
+		mnuAddCustomer.setFont(new Font("monospaced", Font.PLAIN, 14));
+		mnuAddCustomer.setMnemonic('e');
+		mnuAddCustomer.setIcon(new ImageIcon("images/print.png"));
+		mnuAddCustomer.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E,
+				ActionEvent.CTRL_MASK));
+		mnuAddCustomer.setActionCommand("addCustomer");
+		mnuAddCustomer.addActionListener(menulistener);
+
 
 		// order
 		mnuOrder = new JMenuItem("Order");
@@ -296,6 +327,10 @@ public class MainWindow extends JFrame implements WindowListener {
 		mnuOperations.add(mnuNewuser);
 		mnuOperations.addSeparator();
 		mnuOperations.add(mnuNewLabour);
+		mnuOperations.addSeparator();
+		mnuOperations.add(mnuAddEmployee);
+		mnuOperations.addSeparator();
+		mnuOperations.add(mnuAddCustomer);
 		mnuOperations.addSeparator();
 		mnuOperations.add(mnuAddVehicle);
 		mnuOperations.addSeparator();
@@ -358,7 +393,14 @@ public class MainWindow extends JFrame implements WindowListener {
 			} else if (ActCmd.equalsIgnoreCase("addVehicle")) {
 				CardLayout cl = (CardLayout) (cards.getLayout());
 				cl.show(cards, ADD_VEHICLE);
-			} else if (ActCmd.equalsIgnoreCase("addLaborWork")) {
+			}else if (ActCmd.equalsIgnoreCase("addEmployee")) {
+				CardLayout cl = (CardLayout) (cards.getLayout());
+				cl.show(cards, ADD_EMPLOYEE);
+			}else if (ActCmd.equalsIgnoreCase("addCustomer")) {
+				CardLayout cl = (CardLayout) (cards.getLayout());
+				cl.show(cards, ADD_CUSTOMER);
+			}
+			else if (ActCmd.equalsIgnoreCase("addLaborWork")) {
 				CardLayout cl = (CardLayout) (cards.getLayout());
 				cl.show(cards, ADD_LABOR_WORK);
 			} else if (ActCmd.equalsIgnoreCase("exit")) {

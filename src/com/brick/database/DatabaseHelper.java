@@ -23,7 +23,7 @@ public class DatabaseHelper {
 			Class.forName("com.mysql.jdbc.Driver");
 			connection = DriverManager.getConnection(
 					"jdbc:mysql://localhost:3306/brick_inventory", "root",
-					"admin");
+					"shresthas");
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -65,6 +65,23 @@ public class DatabaseHelper {
 		return result;
 
 	}
+	
+	public int addNewEmployee(String name, int phone,String pAddress,String tAddress,String post,int salary) {
+		String query = "INSERT INTO EMPLOYEE (E_Name,E_Type,PAddress,TAddress,Phone,Salary) values ('"
+				+ name + "','" + post + "','" + pAddress + "','" + tAddress + "','" + phone + "','" + salary + "');";
+		Statement stmt = null;
+		int result = -1;
+		try {
+			stmt = connection.createStatement();
+			result = stmt.executeUpdate(query);
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+
+	}
+
 
 	public void insertOrder(String name) {
 
@@ -159,6 +176,21 @@ public class DatabaseHelper {
 		try {
 			stmt = connection.createStatement();
 			result = stmt.executeUpdate(query);
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	public int insertCustomer(String name,String pAddress,String tAddress,int Mobile,int Telephone)
+	{
+		
+		String query="insert into customer(name,PAddress,TAddress,MobileNo,TelephoneNo ) values('"+name+"','"+pAddress+"','"+tAddress+"','"+Mobile+"','"+Telephone+"');";
+		Statement stmt = null;
+		int result =-1;
+		try {
+			stmt=connection.createStatement();
+			result= stmt.executeUpdate(query);
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();

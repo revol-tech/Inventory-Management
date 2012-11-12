@@ -1,18 +1,25 @@
 package com.brick.panel;
 
-import javax.swing.JPanel;
 import java.awt.BorderLayout;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.ImageIcon;
-import java.awt.FlowLayout;
-import javax.swing.JLabel;
-import java.awt.Font;
 import java.awt.Color;
-import java.awt.GridBagLayout;
+import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
+
+import com.brick.database.DatabaseHelper;
+
 
 public class Customer extends JPanel {
 	private final JPanel panel = new JPanel();
@@ -140,6 +147,39 @@ public class Customer extends JPanel {
 		gbc_btnCreate.insets = new Insets(0, 100, 0, 100);
 		gbc_btnCreate.gridx = 0;
 		gbc_btnCreate.gridy = 5;
+
+		btnCreate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if (txtCustomerName.getText().trim().equals(""))
+				{
+					JOptionPane.showMessageDialog(null, "Name Field Should not be empty",
+							"ERROR", JOptionPane.ERROR_MESSAGE);
+					txtCustomerName.requestFocus();
+					System.out.println("here");
+				}
+				else if (txtPermanentAddress.getText().trim().equals("")) {
+					JOptionPane.showMessageDialog(null, "Permanent Address Field Should not be empty",
+							"ERROR", JOptionPane.ERROR_MESSAGE);
+					txtPermanentAddress.requestFocus();
+					
+				}
+				else
+				{
+					DatabaseHelper databasehelper = new DatabaseHelper();
+					databasehelper.insertCustomer(txtCustomerName.getText(),txtPermanentAddress.getText(),txtTemporaryAddress.getText(),Integer.valueOf(txtMobileNo.getText().trim().isEmpty()?
+							"0":txtMobileNo.getText().trim()),Integer.valueOf(txtTelephoneNo.getText().trim().isEmpty()?"0":txtTelephoneNo.getText().trim()));
+					txtCustomerName.setText("");
+					txtPermanentAddress.setText("");
+					txtTemporaryAddress.setText("");
+					txtTelephoneNo.setText("");
+					txtMobileNo.setText("");
+					JOptionPane.showMessageDialog(null, "New Employee Added Successfully",
+							"SUCCESS", JOptionPane.DEFAULT_OPTION);
+					
+				}
+			}
+		});
+
 		panel.add(btnCreate, gbc_btnCreate);
 		
 		add(panel_1, BorderLayout.NORTH);
@@ -158,7 +198,7 @@ public class Customer extends JPanel {
 		panel_3.setBackground(Color.GRAY);
 		
 		panel_1.add(panel_3);
-		button.setIcon(new ImageIcon("/home/shobhab/Development/workspace/Inventory Management1.0/images/exit.png"));
+		button.setIcon(new ImageIcon("images/exit.png"));
 		
 		panel_3.add(button);
 	}

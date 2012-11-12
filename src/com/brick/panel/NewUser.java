@@ -168,22 +168,22 @@ public class NewUser extends JPanel {
 					txtUsername.requestFocus();
 					return;
 				}
-				if (txtPassword.getPassword() == null
-						|| txtPassword.getPassword().equals("")) {
+				if (txtPassword.getText() == null
+						|| txtPassword.getText().equals("")) {
 					JOptionPane.showMessageDialog(null, "Enter Password",
 							"Missing fields", JOptionPane.DEFAULT_OPTION);
 					txtPassword.requestFocus();
 					return;
 				}
-				if (txtCPassword.getPassword() == null
-						|| txtCPassword.getPassword().equals("")) {
+				if (txtCPassword.getText() == null
+						|| txtCPassword.getText().equals("")) {
 					JOptionPane.showMessageDialog(null,
 							"Confirm your password", "Missing fields",
 							JOptionPane.DEFAULT_OPTION);
 					txtCPassword.requestFocus();
 					return;
 				}
-				if (!txtPassword.getText().equals(txtPassword.getText())) {
+				if (!txtPassword.getText().equals(txtCPassword.getText())) {
 					JOptionPane.showMessageDialog(null,
 							"Passwords do not match.", "ERROR",
 							JOptionPane.DEFAULT_OPTION);

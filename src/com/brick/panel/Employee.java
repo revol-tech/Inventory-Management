@@ -6,6 +6,7 @@ import java.awt.FlowLayout;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.JLabel;
 import java.awt.Color;
@@ -14,6 +15,11 @@ import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import javax.swing.JTextField;
+
+import com.brick.database.DatabaseHelper;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class Employee extends JPanel {
 	private final JPanel panel = new JPanel();
@@ -55,11 +61,11 @@ public class Employee extends JPanel {
 		add(panel, BorderLayout.CENTER);
 		GridBagLayout gbl_panel = new GridBagLayout();
 		gbl_panel.columnWidths = new int[]{171, 180};
-		gbl_panel.rowHeights = new int[]{45, 45, 45, 45, 45, 45, 45, 80};
+		gbl_panel.rowHeights = new int[]{45, 45, 45, 45, 45, 45, 80};
 		//gbl_panel.columnWidths = new int[]{0, 0, 0};
 		//gbl_panel.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0};
 		gbl_panel.columnWeights = new double[]{0.0, 0.0};
-		gbl_panel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+		gbl_panel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 		panel.setLayout(gbl_panel);
 		
 		GridBagConstraints gbc_lblEmployeeName = new GridBagConstraints();
@@ -126,7 +132,7 @@ public class Employee extends JPanel {
 		gbc_lblPost.anchor = GridBagConstraints.WEST;
 		gbc_lblPost.insets = new Insets(0, 0, 5, 5);
 		gbc_lblPost.gridx = 0;
-		gbc_lblPost.gridy = 5;
+		gbc_lblPost.gridy = 4;
 		lblPost.setFont(new Font("Dialog", Font.BOLD, 14));
 		panel.add(lblPost, gbc_lblPost);
 		
@@ -134,14 +140,14 @@ public class Employee extends JPanel {
 		gbc_txtPost.insets = new Insets(7, 0, 7, 0);
 		gbc_txtPost.fill = GridBagConstraints.BOTH;
 		gbc_txtPost.gridx = 1;
-		gbc_txtPost.gridy = 5;
+		gbc_txtPost.gridy = 4;
 		panel.add(txtPost, gbc_txtPost);
 		
 		GridBagConstraints gbc_lblSalary = new GridBagConstraints();
 		gbc_lblSalary.anchor = GridBagConstraints.WEST;
 		gbc_lblSalary.insets = new Insets(0, 0, 5, 5);
 		gbc_lblSalary.gridx = 0;
-		gbc_lblSalary.gridy = 6;
+		gbc_lblSalary.gridy = 5;
 		lblSalary.setFont(new Font("Dialog", Font.BOLD, 14));
 		panel.add(lblSalary, gbc_lblSalary);
 		
@@ -149,7 +155,7 @@ public class Employee extends JPanel {
 		gbc_txtSalary.insets = new Insets(7, 0, 7, 0);
 		gbc_txtSalary.fill = GridBagConstraints.BOTH;
 		gbc_txtSalary.gridx = 1;
-		gbc_txtSalary.gridy = 6;
+		gbc_txtSalary.gridy = 5;
 		panel.add(txtSalary, gbc_txtSalary);
 		
 		GridBagConstraints gbc_btnCreate = new GridBagConstraints();
@@ -158,7 +164,41 @@ public class Employee extends JPanel {
 		gbc_btnCreate.anchor = GridBagConstraints.SOUTH;
 		gbc_btnCreate.gridwidth = 2;
 		gbc_btnCreate.gridx = 0;
-		gbc_btnCreate.gridy = 7;
+		gbc_btnCreate.gridy = 6;
+		btnCreate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			
+				DatabaseHelper databasehelper = new DatabaseHelper();
+				String name = txtEmployeeName.getText().trim();
+				int phone = Integer.valueOf(txtPhoneNo.getText().toString().trim().isEmpty()?"0":txtPhoneNo.getText().toString().trim());
+				String pAddress = txtPermanentAddress.getText();
+				String tAddress = txtTemporaryAddress.getText();
+				String post = txtPost.getText();
+				int salary = Integer.valueOf(txtSalary.getText().toString().trim().isEmpty()?"0":txtSalary.getText().toString().trim());
+				if (name.isEmpty())
+				{
+					JOptionPane.showMessageDialog(null, "Name Field Should not be empty",
+							"ERROR", JOptionPane.ERROR_MESSAGE);
+					txtEmployeeName.requestFocus();
+				}
+				else
+				{
+				databasehelper.addNewEmployee(name, phone,pAddress,tAddress,post,salary);
+				
+				txtEmployeeName.setText("");
+				txtPhoneNo.setText("");
+				txtPermanentAddress.setText("");
+				txtPost.setText("");
+				txtTemporaryAddress.setText("");
+				txtSalary.setText("");
+				JOptionPane.showMessageDialog(null, "New Employee Added Successfully",
+						"SUCCESS", JOptionPane.DEFAULT_OPTION);
+				
+				}
+				
+			}
+		});
+
 		btnCreate.setFont(new Font("Dialog", Font.BOLD, 14));
 		panel.add(btnCreate, gbc_btnCreate);
 		
@@ -179,6 +219,7 @@ public class Employee extends JPanel {
 		
 		panel_1.add(panel_3);
 		button.setIcon(new ImageIcon("images/exit.png"));
+
 		
 		panel_3.add(button);
 	}
