@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import javax.swing.BoxLayout;
-import javax.swing.DefaultComboBoxModel;
+import javax.swing.ComboBoxEditor;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -26,7 +26,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
-import javax.swing.plaf.basic.BasicComboBoxEditor;
 
 import com.brick.database.DatabaseHelper;
 import com.brick.helper.LaborHelper;
@@ -258,16 +257,15 @@ public class LaborWork extends JPanel {
 		panel.add(btnSubmit, gbc_btnSubmit);
 		ArrayList<LaborHelper> list = new ArrayList<LaborHelper>();
 		list = databasehelper.fetchLaborName();
-
+		initGUI();
+		labourname.setEditable(true);
+		labourname.setRenderer(new MyListRender());
+		labourname.setEditor(new searchComboBoxEditor());
 		for (LaborHelper laborHelper : list) {
 
 			labourname.addItem(laborHelper);
 		}
 
-		labourname.setEditor(new searchComboBoxEditor());
-		labourname.setRenderer(new MyListRender());
-		labourname.setEditable(true);
-		initGUI();
 		btnSubmit.addActionListener(new ButtonListener());
 		button.addActionListener(new ButtonListener());
 
@@ -417,10 +415,12 @@ public class LaborWork extends JPanel {
 
 	}
 
-	class searchComboBoxEditor extends BasicComboBoxEditor {
+	class searchComboBoxEditor implements ComboBoxEditor {
+		JTextField jTextField;
 
 		public searchComboBoxEditor() {
 			super();
+			jTextField = new JTextField();
 		}
 
 		@Override
@@ -428,21 +428,45 @@ public class LaborWork extends JPanel {
 
 			if (anObject instanceof LaborHelper) {
 				LaborHelper o = (LaborHelper) anObject;
-				super.setItem(o.name);
-			} else if (anObject instanceof String) {
-				super.setItem(anObject);
+				jTextField.setText(o.name);
+			} else {
+				jTextField.setText((String) anObject);
 			}
 
 		}
 
 		@Override
 		public Object getItem() {
-			return new LaborHelper();
+			return jTextField.getText();
 		}
+
+		@Override
+		public Component getEditorComponent() {
+			// TODO Auto-generated method stub
+			return jTextField;
+		}
+
+		@Override
+		public void selectAll() {
+			jTextField.selectAll();
+
+		}
+
+		@Override
+		public void addActionListener(ActionListener l) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void removeActionListener(ActionListener l) {
+			// TODO Auto-generated method stub
+
+		}
+
 	}
 
 	private class ButtonListener implements ActionListener {
-		DatabaseHelper databaseHelper = new DatabaseHelper();
 
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == btnSubmit) {
@@ -604,6 +628,7 @@ public class LaborWork extends JPanel {
 		System.out.print(currentDate);
 
 		if (currentSelected.equals("Patheri")) {
+
 			int labourId = ((LaborHelper) labourname.getSelectedItem()).id;
 			int noOfBrick = Integer.valueOf(txtBrickAmount.getText().toString()
 					.trim());
@@ -673,6 +698,7 @@ public class LaborWork extends JPanel {
 			// distanceA-->blue
 			// distanceA-->yellow
 			if (!txtBrickADistanceA.getText().toString().trim().equals("")) {
+				System.out.print("sss"+labourname.getSelectedItem());
 				int labourId = ((LaborHelper) labourname.getSelectedItem()).id;
 				int noOfBrick = Integer.valueOf(txtBrickADistanceA.getText()
 						.toString().trim());
@@ -699,18 +725,11 @@ public class LaborWork extends JPanel {
 				result = databasehelper.insertWorkEntry(labourId, 2, noOfBrick,
 						amount, currentDate);
 			}
-			if (!txtDistanceC.getText().toString().trim().equals("")) {
-				int labourId = ((LaborHelper) labourname.getSelectedItem()).id;
-				int noOfBrick = Integer.valueOf(txtDistanceC.getText()
-						.toString().trim());
-				float rate = databasehelper.getRate("blue", 1);
-				float amount = noOfBrick * rate;
-				result = databasehelper.insertWorkEntry(labourId, 2, noOfBrick,
-						amount, currentDate);
-			}
+			
 			if (!txtBrickBDistanceA.getText().toString().trim().equals("")) {
+				System.out.print("sss1"+labourname.getSelectedItem());
 				int labourId = ((LaborHelper) labourname.getSelectedItem()).id;
-				int noOfBrick = Integer.valueOf(txtBrickADistanceA.getText()
+				int noOfBrick = Integer.valueOf(txtBrickBDistanceA.getText()
 						.toString().trim());
 				float rate = databasehelper.getRate("Red Coin", 2);
 				float amount = noOfBrick * rate;
@@ -719,7 +738,7 @@ public class LaborWork extends JPanel {
 			}
 			if (!txtBrickBDistanceB.getText().toString().trim().equals("")) {
 				int labourId = ((LaborHelper) labourname.getSelectedItem()).id;
-				int noOfBrick = Integer.valueOf(txtBrickADistanceB.getText()
+				int noOfBrick = Integer.valueOf(txtBrickBDistanceB.getText()
 						.toString().trim());
 				float rate = databasehelper.getRate("blue", 2);
 				float amount = noOfBrick * rate;
@@ -728,8 +747,7 @@ public class LaborWork extends JPanel {
 			}
 			if (!txtBrickBDistanceC.getText().toString().trim().equals("")) {
 				int labourId = ((LaborHelper) labourname.getSelectedItem()).id;
-				int noOfBrick = Integer.valueOf(txtBrickADistanceC.getText()
-						.toString().trim());
+				int noOfBrick = Integer.valueOf(txtBrickBDistanceC.getText().toString().trim());
 				float rate = databasehelper.getRate("yellow", 2);
 				float amount = noOfBrick * rate;
 				result = databasehelper.insertWorkEntry(labourId, 2, noOfBrick,
@@ -763,6 +781,6 @@ public class LaborWork extends JPanel {
 		txtDistanceB.setText("");
 		txtDistanceC.setText("");
 		txtBrickAmount.setText("");
-		
+
 	}
 }
