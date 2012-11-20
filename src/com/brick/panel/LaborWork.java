@@ -75,7 +75,7 @@ public class LaborWork extends JPanel {
 	private final JLabel lblLaborWorkEntry = new JLabel("Labor Work Entry");
 	private JPanel panelLabourWork;
 	private String currentSelected;
-
+	
 	/**
 	 * Create the panel.new
 	 */

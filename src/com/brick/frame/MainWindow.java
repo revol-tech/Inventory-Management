@@ -29,6 +29,7 @@ import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 
 import com.brick.helper.ToolBarUtils;
+import com.brick.panel.AddBrickType;
 import com.brick.panel.Customer;
 import com.brick.panel.Employee;
 import com.brick.panel.Labor;
@@ -36,6 +37,7 @@ import com.brick.panel.LaborWork;
 import com.brick.panel.NewUser;
 import com.brick.panel.NewVehicle;
 import com.brick.panel.Order;
+import com.brick.panel.OrderForm;
 
 public class MainWindow extends JFrame implements WindowListener {
 
@@ -49,9 +51,12 @@ public class MainWindow extends JFrame implements WindowListener {
 	final static String ADD_LABOR_WORK = "Card with Labor work";
 	final static String ADD_EMPLOYEE = "Card with Employee Entry";
 	final static String ADD_CUSTOMER = "Card with Customer Entry";
+	final static String ORDER_FORM = "Card with ordr form";
+	final static String ADD_BRICK_TYPE = "Card with adding brick type";
 	public JMenu mnuOperations, mnuReports, mnuHelp;
 	public JMenuItem mnuNewuser, mnuNewLabour, mnuOrder, mnuAddVehicle,
-			mnuAddLaborWork, mnuItemReport, mnuExit, menuItemAbout,mnuAddEmployee,mnuAddCustomer;
+			mnuAddLaborWork, mnuItemReport, mnuExit, menuItemAbout,
+			mnuAddEmployee, mnuAddCustomer, mnuAddBrickType, mnuAddOrderForm;
 	ToolBarUtils settings = new ToolBarUtils();
 	Dimension screen;
 	JPanel containerPanel;
@@ -113,8 +118,10 @@ public class MainWindow extends JFrame implements WindowListener {
 		cards.add(newvehicle, ADD_VEHICLE);
 		cards.add(laborwork, ADD_LABOR_WORK);
 		cards.add(newLabour, ADD_LABOUR);
-		cards.add(employee,ADD_EMPLOYEE);
-		cards.add(customer,ADD_CUSTOMER);
+		cards.add(employee, ADD_EMPLOYEE);
+		cards.add(customer, ADD_CUSTOMER);
+		cards.add(new OrderForm(), ORDER_FORM);
+		cards.add(new AddBrickType(), ADD_BRICK_TYPE);
 
 		getContentPane().setLayout(new BorderLayout(0, 0));
 		panel_Top.setLayout(new BorderLayout(0, 0));
@@ -170,25 +177,6 @@ public class MainWindow extends JFrame implements WindowListener {
 
 	}
 
-	/*public void addComponentToPane(Container pane) {
-
-		NewUser newUser = new NewUser();
-		Order order = new Order();
-		NewVehicle newvehicle = new NewVehicle();
-		LaborWork laborwork = new LaborWork();
-		Labor newLabor = new Labor();
-		// Create the panel that contains the "cards".
-		cards = new JPanel(new CardLayout());
-		cards.add(new JPanel(), "1");
-		cards.add(newUser, USERADD);
-		cards.add(newLabor,ADD_LABOUR);
-		cards.add(order, ADD_ORDER);
-		cards.add(newvehicle, ADD_VEHICLE);
-		cards.add(laborwork, ADD_LABOR_WORK);
-		cards.add(employee,ADD_EMPLOYEE);
-
-	}
-*/
 	public JMenuBar CreateJMenuBar() {
 		JMenuBar menubar = new JMenuBar();
 		/********** CREATING OPERATIONS MENU ***********************/
@@ -245,7 +233,7 @@ public class MainWindow extends JFrame implements WindowListener {
 				ActionEvent.CTRL_MASK));
 		mnuAddVehicle.setActionCommand("addVehicle");
 		mnuAddVehicle.addActionListener(menulistener);
-		
+
 		// Add Employee
 		mnuAddEmployee = new JMenuItem("Add New Employee");
 		mnuAddEmployee.setForeground(Color.blue);
@@ -268,6 +256,27 @@ public class MainWindow extends JFrame implements WindowListener {
 		mnuAddCustomer.setActionCommand("addCustomer");
 		mnuAddCustomer.addActionListener(menulistener);
 
+		// add brick type
+		mnuAddBrickType = new JMenuItem("Add brick type");
+		mnuAddBrickType.setForeground(Color.blue);
+		mnuAddBrickType.setFont(new Font("monospaced", Font.PLAIN, 14));
+		mnuAddBrickType.setMnemonic('e');
+		mnuAddBrickType.setIcon(new ImageIcon("images/print.png"));
+		mnuAddBrickType.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E,
+				ActionEvent.CTRL_MASK));
+		mnuAddBrickType.setActionCommand("addBrickType");
+		mnuAddBrickType.addActionListener(menulistener);
+
+		// Add order form
+		mnuAddOrderForm = new JMenuItem("Add order from");
+		mnuAddOrderForm.setForeground(Color.blue);
+		mnuAddOrderForm.setFont(new Font("monospaced", Font.PLAIN, 14));
+		mnuAddOrderForm.setMnemonic('e');
+		mnuAddOrderForm.setIcon(new ImageIcon("images/print.png"));
+		mnuAddOrderForm.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E,
+				ActionEvent.CTRL_MASK));
+		mnuAddOrderForm.setActionCommand("addOrderForm");
+		mnuAddOrderForm.addActionListener(menulistener);
 
 		// order
 		mnuOrder = new JMenuItem("Order");
@@ -334,6 +343,10 @@ public class MainWindow extends JFrame implements WindowListener {
 		mnuOperations.addSeparator();
 		mnuOperations.add(mnuAddVehicle);
 		mnuOperations.addSeparator();
+		mnuOperations.add(mnuAddBrickType);
+		mnuOperations.addSeparator();
+		mnuOperations.add(mnuAddOrderForm);
+		mnuOperations.addSeparator();
 		mnuOperations.add(mnuOrder);
 		mnuOperations.addSeparator();
 		mnuOperations.add(mnuAddLaborWork);
@@ -381,29 +394,26 @@ public class MainWindow extends JFrame implements WindowListener {
 
 		public void actionPerformed(ActionEvent e) {
 			String ActCmd = e.getActionCommand();
+			CardLayout cl = (CardLayout) (cards.getLayout());
 			if (ActCmd.equalsIgnoreCase("newuser")) {
-				CardLayout cl = (CardLayout) (cards.getLayout());
 				cl.show(cards, USERADD);
 			} else if (ActCmd.equalsIgnoreCase("addLabour")) {
-				CardLayout cl = (CardLayout) (cards.getLayout());
 				cl.show(cards, ADD_LABOUR);
 			} else if (ActCmd.equalsIgnoreCase("addVehicleinfo")) {
-				CardLayout cl = (CardLayout) (cards.getLayout());
 				cl.show(cards, ADD_ORDER);
 			} else if (ActCmd.equalsIgnoreCase("addVehicle")) {
-				CardLayout cl = (CardLayout) (cards.getLayout());
 				cl.show(cards, ADD_VEHICLE);
-			}else if (ActCmd.equalsIgnoreCase("addEmployee")) {
-				CardLayout cl = (CardLayout) (cards.getLayout());
+			} else if (ActCmd.equalsIgnoreCase("addEmployee")) {
 				cl.show(cards, ADD_EMPLOYEE);
-			}else if (ActCmd.equalsIgnoreCase("addCustomer")) {
-				CardLayout cl = (CardLayout) (cards.getLayout());
+			} else if (ActCmd.equalsIgnoreCase("addCustomer")) {
 				cl.show(cards, ADD_CUSTOMER);
-			}
-			else if (ActCmd.equalsIgnoreCase("addLaborWork")) {
-				CardLayout cl = (CardLayout) (cards.getLayout());
+			} else if (ActCmd.equalsIgnoreCase("addLaborWork")) {
 				cl.show(cards, ADD_LABOR_WORK);
-			} else if (ActCmd.equalsIgnoreCase("exit")) {
+			} else if (ActCmd.equalsIgnoreCase("addOrderForm")) {
+				cl.show(cards, ORDER_FORM);
+			} else if (ActCmd.equalsIgnoreCase("addBrickType")) {
+				cl.show(cards, ADD_BRICK_TYPE);
+			}else if (ActCmd.equalsIgnoreCase("exit")) {
 				ConfirmExit();
 			}
 		}

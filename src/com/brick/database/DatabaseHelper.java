@@ -23,7 +23,7 @@ public class DatabaseHelper {
 			Class.forName("com.mysql.jdbc.Driver");
 			connection = DriverManager.getConnection(
 					"jdbc:mysql://localhost:3306/brick_inventory", "root",
-					"shresthas");
+					"admin");
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -83,9 +83,20 @@ public class DatabaseHelper {
 	}
 
 
-	public void insertOrder(String name) {
+	public int addBrickType(String brickType, String brickDesc,float brickRate) {
+		String query = "INSERT INTO brick (brick_type,brick_desc,brick_amount) values ('"
+				+ brickType + "','" + brickDesc + "','" + brickRate+ "');";
+		Statement stmt = null;
+		int result = -1;
+		try {
+			stmt = connection.createStatement();
+			result = stmt.executeUpdate(query);
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
 
-		String query = "";
 	}
 
 	public ArrayList<LaborHelper> fetchLaborName() {
