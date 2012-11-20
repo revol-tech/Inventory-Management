@@ -7,10 +7,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Date;
 
+import com.brick.helper.BrickHelper;
+import com.brick.helper.CustomerHelper;
+import com.brick.helper.EmployeeHelper;
 import com.brick.helper.LaborHelper;
 import com.brick.helper.VehicleInfo;
+import com.brick.panel.Customer;
 
 public class DatabaseHelper {
 	private Connection connection = null;
@@ -23,7 +26,7 @@ public class DatabaseHelper {
 			Class.forName("com.mysql.jdbc.Driver");
 			connection = DriverManager.getConnection(
 					"jdbc:mysql://localhost:3306/brick_inventory", "root",
-					"admin");
+					"shresthas");
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -65,10 +68,18 @@ public class DatabaseHelper {
 		return result;
 
 	}
-	
-	public int addNewEmployee(String name, int phone,String pAddress,String tAddress,String post,int salary) {
+
+	public int addNewEmployee(String name, int phone, String pAddress,
+			String tAddress, String post, int salary) {
 		String query = "INSERT INTO EMPLOYEE (E_Name,E_Type,PAddress,TAddress,Phone,Salary) values ('"
-				+ name + "','" + post + "','" + pAddress + "','" + tAddress + "','" + phone + "','" + salary + "');";
+				+ name
+				+ "','"
+				+ post
+				+ "','"
+				+ pAddress
+				+ "','"
+				+ tAddress
+				+ "','" + phone + "','" + salary + "');";
 		Statement stmt = null;
 		int result = -1;
 		try {
@@ -82,21 +93,9 @@ public class DatabaseHelper {
 
 	}
 
+	public void insertOrder(String name) {
 
-	public int addBrickType(String brickType, String brickDesc,float brickRate) {
-		String query = "INSERT INTO brick (brick_type,brick_desc,brick_amount) values ('"
-				+ brickType + "','" + brickDesc + "','" + brickRate+ "');";
-		Statement stmt = null;
-		int result = -1;
-		try {
-			stmt = connection.createStatement();
-			result = stmt.executeUpdate(query);
-			return result;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return result;
-
+		String query = "";
 	}
 
 	public ArrayList<LaborHelper> fetchLaborName() {
@@ -118,6 +117,25 @@ public class DatabaseHelper {
 		return list;
 	}
 
+	public ArrayList<CustomerHelper> fetchCustomerName() {
+		ArrayList<CustomerHelper> list = new ArrayList<CustomerHelper>();
+		String query = "SELECT * From customer";
+		try {
+			pst = connection.prepareStatement(query);
+			rs = pst.executeQuery();
+			while (rs.next()) {
+				CustomerHelper customer = new CustomerHelper();
+				customer.id = rs.getInt("id");
+				customer.name = rs.getString("name");
+				list.add(customer);
+			}
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+		}
+		return list;
+	}
+
 	public ArrayList<VehicleInfo> fetchVechileInfo() {
 		ArrayList<VehicleInfo> list = new ArrayList<VehicleInfo>();
 		String query = "SELECT * From vehicle";
@@ -129,6 +147,44 @@ public class DatabaseHelper {
 				vehicleInfo.vechileNo = rs.getString("vehicle_no");
 				vehicleInfo.vechileId = rs.getInt("vechile_id");
 				list.add(vehicleInfo);
+			}
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	public ArrayList<EmployeeHelper> fetchDriverName() {
+		ArrayList<EmployeeHelper> list = new ArrayList<EmployeeHelper>();
+		String query = "SELECT * From EMPLOYEE where E_Type='driver'";
+		try {
+			pst = connection.prepareStatement(query);
+			rs = pst.executeQuery();
+			while (rs.next()) {
+				EmployeeHelper driverName = new EmployeeHelper();
+				driverName.id = rs.getInt("E_id");
+				driverName.name = rs.getString("E_Name");
+				list.add(driverName);
+			}
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	public ArrayList<BrickHelper> fetchBrickName() {
+		ArrayList<BrickHelper> list = new ArrayList<BrickHelper>();
+		String query = "SELECT * From brick";
+		try {
+			pst = connection.prepareStatement(query);
+			rs = pst.executeQuery();
+			while (rs.next()) {
+				BrickHelper brickName = new BrickHelper();
+				brickName.id = rs.getInt("brick_id");
+				brickName.name = rs.getString("brick_type");
+				list.add(brickName);
 			}
 		} catch (SQLException e) {
 
@@ -171,19 +227,20 @@ public class DatabaseHelper {
 		return result;
 	}
 
-	public int insertWorkEntry(int labourId, int brickID, int noOfBrick,
-			float amount, String date) {
+	public int insertCustomer(String name, String pAddress, String tAddress,
+			int Mobile, int Telephone) {
 
-		String query = "insert into labour_transcation(l_id,bd_id,Number,Amount,transcation_date) values('"
-				+ labourId
+		String query = "insert into customer(name,PAddress,TAddress,MobileNo,TelephoneNo ) values('"
+				+ name
 				+ "','"
-				+ brickID
+				+ pAddress
 				+ "','"
-				+ noOfBrick
+				+ tAddress
 				+ "','"
-				+ amount + "','" + date + "');";
-		int result = -1;
+				+ Mobile
+				+ "','" + Telephone + "');";
 		Statement stmt = null;
+		int result = -1;
 		try {
 			stmt = connection.createStatement();
 			result = stmt.executeUpdate(query);
@@ -193,40 +250,30 @@ public class DatabaseHelper {
 		}
 		return result;
 	}
-	public int insertCustomer(String name,String pAddress,String tAddress,int Mobile,int Telephone)
-	{
-		
-		String query="insert into customer(name,PAddress,TAddress,MobileNo,TelephoneNo ) values('"+name+"','"+pAddress+"','"+tAddress+"','"+Mobile+"','"+Telephone+"');";
+
+	public Object insertOrderDelivery(String voucher, int vehicle, int driver,
+			int brick, int half, int customer, String destination) {
+
+		String query = "insert into OrderDelivery(VoucherNo,vechile_id,E_id,brick_id,id,destination,HalfBrick) values('"
+				+ voucher
+				+ "','"
+				+ vehicle
+				+ "','"
+				+ driver
+				+ "','"
+				+ brick
+				+ "','" + customer + "','" + destination + "','" + half + "');";
 		Statement stmt = null;
-		int result =-1;
+		String errorMessage = "";
+		int result = -1;
 		try {
-			stmt=connection.createStatement();
-			result= stmt.executeUpdate(query);
-			return result;
+			stmt = connection.createStatement();
+			result = stmt.executeUpdate(query);
 		} catch (Exception e) {
+			errorMessage = e.getMessage();
 			e.printStackTrace();
 		}
-		return result;
-	}
-
-	public float getRate(String type, int brickId) {
-		float rate = -1;
-		String query = "SELECT brick_distance_amount From brick_distance where Distance_Type='"
-				+ type+"'" +"and brick_id='"+brickId+"'" ;
-		try {
-			pst = connection.prepareStatement(query);
-			rs = pst.executeQuery();
-			while(rs.next()){
-				rate = rs.getFloat("brick_distance_amount");
-				
-			}
-
-		} catch (SQLException e) {
-
-			e.printStackTrace();
-		}
-		System.out.println(rate);
-		return rate;
+		return new Object[] { result,errorMessage };
 	}
 
 }
