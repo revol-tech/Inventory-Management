@@ -199,11 +199,11 @@ public class OrderForm extends JPanel {
 
 		comboBoxCustomerName.setEditable(true);
 		comboBoxCustomerName.setRenderer(new MyListRender());
-		comboBoxCustomerName.setEditor(new CustomComboBoxEditor());
 
 		ArrayList<CustomerHelper> customerList = databaseHelper.getCustomer();
 		for (CustomerHelper customerHelper : customerList) {
 			comboBoxCustomerName.addItem(customerHelper);
+			comboBoxCustomerName.setEditor(new CustomComboBoxEditor(customerHelper));
 		}
 
 	}
@@ -218,7 +218,6 @@ public class OrderForm extends JPanel {
 				JList<? extends Object> list, Object value, int index,
 				boolean isSelected, boolean cellHasFocus) {
 			CustomerHelper customerHelper = (CustomerHelper) value;
-
 			setText(customerHelper.name);
 			return this;
 		}

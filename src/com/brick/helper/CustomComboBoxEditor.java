@@ -8,9 +8,11 @@ import javax.swing.JTextField;
 
 public class CustomComboBoxEditor implements ComboBoxEditor {
 	JTextField jTextField;
+	Object object;
 
-	public CustomComboBoxEditor() {
+	public CustomComboBoxEditor(Object object) {
 		super();
+		this.object = object;
 		jTextField = new JTextField();
 	}
 
@@ -23,7 +25,16 @@ public class CustomComboBoxEditor implements ComboBoxEditor {
 		} else if (anObject instanceof CustomerHelper) {
 			CustomerHelper customerHelper = (CustomerHelper) anObject;
 			jTextField.setText(customerHelper.name);
-		} else {
+		} else if (anObject instanceof BrickHelper) {
+			BrickHelper o = (BrickHelper) anObject;
+			jTextField.setText(o.name);
+		} else if (anObject instanceof EmployeeHelper) {
+			EmployeeHelper o = (EmployeeHelper) anObject;
+			jTextField.setText(o.name);
+		}else if (anObject instanceof VehicleInfo) {
+			VehicleInfo o = (VehicleInfo) anObject;
+			jTextField.setText(o.vechileNo);
+		}  else {
 			jTextField.setText((String) anObject);
 		}
 

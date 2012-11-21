@@ -15,6 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import javax.jws.Oneway;
 import javax.swing.BoxLayout;
 import javax.swing.ComboBoxEditor;
 import javax.swing.ImageIcon;
@@ -28,6 +29,8 @@ import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
 
 import com.brick.database.DatabaseHelper;
+import com.brick.helper.CustomComboBoxEditor;
+import com.brick.helper.CustomRender;
 import com.brick.helper.LaborHelper;
 
 public class LaborWork extends JPanel {
@@ -75,7 +78,7 @@ public class LaborWork extends JPanel {
 	private final JLabel lblLaborWorkEntry = new JLabel("Labor Work Entry");
 	private JPanel panelLabourWork;
 	private String currentSelected;
-	
+
 	/**
 	 * Create the panel.new
 	 */
@@ -259,10 +262,10 @@ public class LaborWork extends JPanel {
 		list = databasehelper.fetchLaborName();
 		initGUI();
 		labourname.setEditable(true);
-		labourname.setRenderer(new MyListRender());
-		labourname.setEditor(new searchComboBoxEditor());
+		labourname.setRenderer(new CustomRender());
 		for (LaborHelper laborHelper : list) {
 
+			labourname.setEditor(new CustomComboBoxEditor(laborHelper));
 			labourname.addItem(laborHelper);
 		}
 
@@ -396,74 +399,6 @@ public class LaborWork extends JPanel {
 
 			}
 		});
-	}
-
-	public class MyListRender extends JLabel implements
-			ListCellRenderer<Object> {
-
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		public Component getListCellRendererComponent(
-				JList<? extends Object> list, Object value, int index,
-				boolean isSelected, boolean cellHasFocus) {
-			LaborHelper tt = (LaborHelper) value;
-
-			setText(tt.name);
-			return this;
-		}
-
-	}
-
-	class searchComboBoxEditor implements ComboBoxEditor {
-		JTextField jTextField;
-
-		public searchComboBoxEditor() {
-			super();
-			jTextField = new JTextField();
-		}
-
-		@Override
-		public void setItem(Object anObject) {
-
-			if (anObject instanceof LaborHelper) {
-				LaborHelper o = (LaborHelper) anObject;
-				jTextField.setText(o.name);
-			} else {
-				jTextField.setText((String) anObject);
-			}
-
-		}
-
-		@Override
-		public Object getItem() {
-			return jTextField.getText();
-		}
-
-		@Override
-		public Component getEditorComponent() {
-			// TODO Auto-generated method stub
-			return jTextField;
-		}
-
-		@Override
-		public void selectAll() {
-			jTextField.selectAll();
-
-		}
-
-		@Override
-		public void addActionListener(ActionListener l) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void removeActionListener(ActionListener l) {
-			// TODO Auto-generated method stub
-
-		}
-
 	}
 
 	private class ButtonListener implements ActionListener {
@@ -698,7 +633,7 @@ public class LaborWork extends JPanel {
 			// distanceA-->blue
 			// distanceA-->yellow
 			if (!txtBrickADistanceA.getText().toString().trim().equals("")) {
-				System.out.print("sss"+labourname.getSelectedItem());
+				System.out.print("sss" + labourname.getSelectedItem());
 				int labourId = ((LaborHelper) labourname.getSelectedItem()).id;
 				int noOfBrick = Integer.valueOf(txtBrickADistanceA.getText()
 						.toString().trim());
@@ -725,9 +660,9 @@ public class LaborWork extends JPanel {
 				result = databasehelper.insertWorkEntry(labourId, 2, noOfBrick,
 						amount, currentDate);
 			}
-			
+
 			if (!txtBrickBDistanceA.getText().toString().trim().equals("")) {
-				System.out.print("sss1"+labourname.getSelectedItem());
+				System.out.print("sss1" + labourname.getSelectedItem());
 				int labourId = ((LaborHelper) labourname.getSelectedItem()).id;
 				int noOfBrick = Integer.valueOf(txtBrickBDistanceA.getText()
 						.toString().trim());
@@ -747,7 +682,8 @@ public class LaborWork extends JPanel {
 			}
 			if (!txtBrickBDistanceC.getText().toString().trim().equals("")) {
 				int labourId = ((LaborHelper) labourname.getSelectedItem()).id;
-				int noOfBrick = Integer.valueOf(txtBrickBDistanceC.getText().toString().trim());
+				int noOfBrick = Integer.valueOf(txtBrickBDistanceC.getText()
+						.toString().trim());
 				float rate = databasehelper.getRate("yellow", 2);
 				float amount = noOfBrick * rate;
 				result = databasehelper.insertWorkEntry(labourId, 2, noOfBrick,
