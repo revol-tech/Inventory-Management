@@ -25,7 +25,7 @@ public class DatabaseHelper {
 			Class.forName("com.mysql.jdbc.Driver");
 			connection = DriverManager.getConnection(
 					"jdbc:mysql://localhost:3306/brick_inventory", "root",
-					"admin");
+					"shresthas");
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -177,7 +177,7 @@ public class DatabaseHelper {
 			e.printStackTrace();
 		}
 		return result;
-
+		
 	}
 
 	public int addBrickType(String brickType, String brickDesc, float brickRate) {
