@@ -2,7 +2,6 @@ package com.brick.panel;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -10,30 +9,27 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 import javax.swing.BoxLayout;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.ListCellRenderer;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 
 import com.brick.database.DatabaseHelper;
 import com.brick.helper.BrickHelper;
-import com.brick.helper.CustomComboBoxEditor;
-import com.brick.helper.CustomRender;
+import com.brick.helper.ComboBoxItemEditor;
+import com.brick.helper.ComboBoxItemRenderer;
 import com.brick.helper.CustomerHelper;
 import com.brick.helper.EmployeeHelper;
 import com.brick.helper.VehicleInfo;
@@ -65,11 +61,15 @@ public class Order extends JPanel {
 	private final JTextField txtRemainder = new JTextField();
 	DatabaseHelper databasehelper = new DatabaseHelper();
 	String numToken = "[\\p{Digit}]+";
+	private DefaultComboBoxModel model;
+	private JPanel panelOrder;
 
 	/**
 	 * Create the panel.
 	 */
 	public Order() {
+		panelOrder = this;
+		model = new DefaultComboBoxModel<BrickHelper>();
 		txtDestination.setColumns(10);
 		txtRemainder.setColumns(10);
 		txtAdvance.setColumns(10);
@@ -80,8 +80,7 @@ public class Order extends JPanel {
 				chckbxHalf.setSelected(true);
 			}
 		});
-		
-		
+
 		txtHalf.setColumns(10);
 		txtVoucherNo.setColumns(10);
 
@@ -110,6 +109,13 @@ public class Order extends JPanel {
 
 		panel.add(panel_3);
 		button.setIcon(new ImageIcon("images/exit.png"));
+		button.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				panelOrder.setVisible(false);
+			}
+		});
 
 		panel_3.add(button);
 
@@ -149,12 +155,14 @@ public class Order extends JPanel {
 		ArrayList<CustomerHelper> customerlist = new ArrayList<CustomerHelper>();
 		customerlist = databasehelper.fetchCustomerName();
 		comboBoxCustomer.setEditable(true);
-		comboBoxCustomer.setRenderer(new CustomRender());
+		comboBoxCustomer.setFont(new Font("Dialog", Font.BOLD, 14));
+		comboBoxCustomer.setRenderer(new ComboBoxItemRenderer());
+		comboBoxCustomer.setEditor(new ComboBoxItemEditor());
+		model = new DefaultComboBoxModel();
+		comboBoxCustomer.setModel(model);
 		for (CustomerHelper customerHelper : customerlist) {
 
-			comboBoxCustomer
-					.setEditor(new CustomComboBoxEditor(customerHelper));
-			comboBoxCustomer.addItem(customerHelper);
+			model.addElement(customerHelper);
 		}
 
 		GridBagConstraints gbc_comboBoxCustomer = new GridBagConstraints();
@@ -183,12 +191,14 @@ public class Order extends JPanel {
 		ArrayList<VehicleInfo> list = new ArrayList<VehicleInfo>();
 		list = databasehelper.fetchVechileInfo();
 		comboBoxVehicleNo.setEditable(true);
-		comboBoxVehicleNo.setRenderer(new CustomRender());
+		comboBoxVehicleNo.setFont(new Font("Dialog", Font.BOLD, 14));
+		comboBoxVehicleNo.setRenderer(new ComboBoxItemRenderer());
+		comboBoxVehicleNo.setEditor(new ComboBoxItemEditor());
+		model = new DefaultComboBoxModel();
+		comboBoxVehicleNo.setModel(model);
 		for (VehicleInfo vehicleHelper : list) {
 
-			comboBoxVehicleNo
-					.setEditor(new CustomComboBoxEditor(vehicleHelper));
-			comboBoxVehicleNo.addItem(vehicleHelper);
+			model.addElement(vehicleHelper);
 		}
 
 		GridBagConstraints gbc_lblDestination = new GridBagConstraints();
@@ -220,15 +230,17 @@ public class Order extends JPanel {
 		gbc_comboBoxDriverName.gridx = 1;
 		gbc_comboBoxDriverName.gridy = 2;
 		comboBoxDriverName.setEditable(true);
+		comboBoxDriverName.setFont(new Font("Dialog", Font.BOLD, 14));
 		panel_1.add(comboBoxDriverName, gbc_comboBoxDriverName);
 		ArrayList<EmployeeHelper> driverlist = new ArrayList<EmployeeHelper>();
 		driverlist = databasehelper.fetchDriverName();
 		comboBoxDriverName.setEditable(true);
-		comboBoxDriverName.setRenderer(new CustomRender());
+		comboBoxDriverName.setRenderer(new ComboBoxItemRenderer());
+		comboBoxDriverName.setEditor(new ComboBoxItemEditor());
+		model = new DefaultComboBoxModel();
+		comboBoxDriverName.setModel(model);
 		for (EmployeeHelper employeeHelper : driverlist) {
-			comboBoxDriverName.setEditor(new CustomComboBoxEditor(
-					employeeHelper));
-			comboBoxDriverName.addItem(employeeHelper);
+			model.addElement(employeeHelper);
 		}
 
 		GridBagConstraints gbc_lblTotal = new GridBagConstraints();
@@ -259,15 +271,18 @@ public class Order extends JPanel {
 		gbc_comboBoxBrickType.fill = GridBagConstraints.BOTH;
 		gbc_comboBoxBrickType.gridx = 1;
 		gbc_comboBoxBrickType.gridy = 3;
+		comboBoxBrickType.setFont(new Font("Dialog", Font.BOLD, 14));
 		panel_1.add(comboBoxBrickType, gbc_comboBoxBrickType);
 		ArrayList<BrickHelper> bricklist = new ArrayList<BrickHelper>();
 		bricklist = databasehelper.fetchBrickName();
 		comboBoxBrickType.setEditable(true);
-		comboBoxBrickType.setRenderer(new CustomRender());
+		comboBoxBrickType.setRenderer(new ComboBoxItemRenderer());
+		comboBoxBrickType.setEditor(new ComboBoxItemEditor());
+		model = new DefaultComboBoxModel();
+		comboBoxBrickType.setModel(model);
 		for (BrickHelper brickHelper : bricklist) {
 
-			comboBoxBrickType.setEditor(new CustomComboBoxEditor(brickHelper));
-			comboBoxBrickType.addItem(brickHelper);
+			model.addElement(brickHelper);
 		}
 
 		GridBagConstraints gbc_lblBalance = new GridBagConstraints();

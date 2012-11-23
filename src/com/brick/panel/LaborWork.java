@@ -2,7 +2,6 @@ package com.brick.panel;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -15,22 +14,19 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import javax.jws.Oneway;
 import javax.swing.BoxLayout;
-import javax.swing.ComboBoxEditor;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.ListCellRenderer;
 
 import com.brick.database.DatabaseHelper;
-import com.brick.helper.CustomComboBoxEditor;
-import com.brick.helper.CustomRender;
+import com.brick.helper.ComboBoxItemEditor;
+import com.brick.helper.ComboBoxItemRenderer;
 import com.brick.helper.LaborHelper;
 
 public class LaborWork extends JPanel {
@@ -78,6 +74,7 @@ public class LaborWork extends JPanel {
 	private final JLabel lblLaborWorkEntry = new JLabel("Labor Work Entry");
 	private JPanel panelLabourWork;
 	private String currentSelected;
+	private DefaultComboBoxModel model;
 
 	/**
 	 * Create the panel.new
@@ -262,11 +259,13 @@ public class LaborWork extends JPanel {
 		list = databasehelper.fetchLaborName();
 		initGUI();
 		labourname.setEditable(true);
-		labourname.setRenderer(new CustomRender());
+		labourname.setRenderer(new ComboBoxItemRenderer());
+		labourname.setEditor(new ComboBoxItemEditor());
+		model=new DefaultComboBoxModel();
+		labourname.setModel(model);
 		for (LaborHelper laborHelper : list) {
 
-			labourname.setEditor(new CustomComboBoxEditor(laborHelper));
-			labourname.addItem(laborHelper);
+			model.addElement(laborHelper);
 		}
 
 		btnSubmit.addActionListener(new ButtonListener());

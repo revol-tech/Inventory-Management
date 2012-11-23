@@ -13,6 +13,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.BoxLayout;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -27,7 +28,8 @@ import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 
 import com.brick.database.DatabaseHelper;
-import com.brick.helper.CustomComboBoxEditor;
+import com.brick.helper.ComboBoxItemEditor;
+import com.brick.helper.ComboBoxItemRenderer;
 import com.brick.helper.CustomerHelper;
 
 public class OrderForm extends JPanel {
@@ -48,6 +50,7 @@ public class OrderForm extends JPanel {
 	private final JButton btnOrder = new JButton("Order");
 	private JPanel panelOrderForm;
 	private DatabaseHelper databaseHelper = new DatabaseHelper();
+	private DefaultComboBoxModel model;
 
 	/**
 	 * Create the panel.
@@ -198,32 +201,19 @@ public class OrderForm extends JPanel {
 		btnOrder.addActionListener(new CustomActionListner());
 
 		comboBoxCustomerName.setEditable(true);
-		comboBoxCustomerName.setRenderer(new MyListRender());
+		comboBoxCustomerName.setRenderer(new ComboBoxItemRenderer());
 
 		ArrayList<CustomerHelper> customerList = databaseHelper.getCustomer();
+		comboBoxCustomerName.setEditor(new ComboBoxItemEditor());
+		model=new DefaultComboBoxModel();
+		comboBoxCustomerName.setModel(model);
 		for (CustomerHelper customerHelper : customerList) {
-			comboBoxCustomerName.addItem(customerHelper);
-			comboBoxCustomerName.setEditor(new CustomComboBoxEditor(customerHelper));
+			model.addElement(customerHelper);
 		}
 
 	}
 
-	public class MyListRender extends JLabel implements
-			ListCellRenderer<Object> {
-
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		public Component getListCellRendererComponent(
-				JList<? extends Object> list, Object value, int index,
-				boolean isSelected, boolean cellHasFocus) {
-			CustomerHelper customerHelper = (CustomerHelper) value;
-			setText(customerHelper.name);
-			return this;
-		}
-
-	}
-
+	
 	public class CustomActionListner implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
