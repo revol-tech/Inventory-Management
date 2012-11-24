@@ -94,7 +94,8 @@ public class DatabaseHelper {
 
 	public ArrayList<EmployeeHelper> fetchDriverName() {
 		ArrayList<EmployeeHelper> list = new ArrayList<EmployeeHelper>();
-		String query = "SELECT * From EMPLOYEE where E_Type='driver'";
+		String query = "SELECT * From employee where E_Type='driver'";
+		System.out.println("check");
 		try {
 			pst = connection.prepareStatement(query);
 			rs = pst.executeQuery();
@@ -158,7 +159,7 @@ public class DatabaseHelper {
 
 	public int addNewEmployee(String name, int phone, String pAddress,
 			String tAddress, String post, int salary) {
-		String query = "INSERT INTO EMPLOYEE (E_Name,E_Type,PAddress,TAddress,Phone,Salary) values ('"
+		String query = "INSERT INTO employee (E_Name,E_Type,PAddress,TAddress,Phone,Salary) values ('"
 				+ name
 				+ "','"
 				+ post

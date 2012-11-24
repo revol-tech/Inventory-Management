@@ -241,6 +241,7 @@ public class Order extends JPanel {
 		comboBoxDriverName.setModel(model);
 		for (EmployeeHelper employeeHelper : driverlist) {
 			model.addElement(employeeHelper);
+			System.out.println(employeeHelper.name);
 		}
 
 		GridBagConstraints gbc_lblTotal = new GridBagConstraints();
