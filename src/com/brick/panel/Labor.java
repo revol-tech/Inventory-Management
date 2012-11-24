@@ -6,8 +6,10 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.SwingUtilities;
 
 import com.brick.database.DatabaseHelper;
+import com.brick.frame.MainWindow;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -126,6 +128,7 @@ public class Labor extends JPanel {
 						JOptionPane.showMessageDialog(null,
 								"successfully added", "succedd",
 								JOptionPane.DEFAULT_OPTION);
+						MainWindow.cards.invalidate();
 						resetFields();
 					}
 

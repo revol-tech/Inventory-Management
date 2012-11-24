@@ -34,15 +34,18 @@ import com.brick.panel.Customer;
 import com.brick.panel.Employee;
 import com.brick.panel.Labor;
 import com.brick.panel.LaborWork;
+import com.brick.panel.LabourReport;
+import com.brick.panel.Main_Labor;
 import com.brick.panel.NewUser;
 import com.brick.panel.NewVehicle;
 import com.brick.panel.Order;
 import com.brick.panel.OrderForm;
+import com.brick.panel.OrderReport;
 
 public class MainWindow extends JFrame implements WindowListener {
 
 	private static final long serialVersionUID = 1L;
-	JPanel cards; // a panel that uses CardLayout
+	public static JPanel cards; // a panel that uses CardLayout
 
 	final static String USERADD = "Card with add user";
 	final static String ADD_LABOUR = "Card with add Labour";
@@ -53,10 +56,14 @@ public class MainWindow extends JFrame implements WindowListener {
 	final static String ADD_CUSTOMER = "Card with Customer Entry";
 	final static String ORDER_FORM = "Card with ordr form";
 	final static String ADD_BRICK_TYPE = "Card with adding brick type";
+	final static String ADD_MAIN_LABOR = "Labor functionality";
+	final static String ADD_LABOUR_REPORT = "Labor report";
+	final static String ADD_ORDER_REPORT = "Order report";
+
 	public JMenu mnuOperations, mnuReports, mnuHelp;
 	public JMenuItem mnuNewuser, mnuNewLabour, mnuOrder, mnuAddVehicle,
 			mnuAddLaborWork, mnuItemReport, mnuExit, menuItemAbout,
-			mnuAddEmployee, mnuAddCustomer, mnuAddBrickType, mnuAddOrderForm;
+			mnuAddEmployee, mnuAddCustomer, mnuAddBrickType, mnuAddOrderForm,mnuMainLabor,mnuLabourReport,mnuOrderReport;
 	ToolBarUtils settings = new ToolBarUtils();
 	Dimension screen;
 	JPanel containerPanel;
@@ -69,12 +76,12 @@ public class MainWindow extends JFrame implements WindowListener {
 	JLabel lblTimeNow = new JLabel();
 	// JPanel desktop = new JPanel();
 	JFrame jFrame;
+
 	Container cont;
-
 	public MainWindow() {
-
 		// Create and set up the window.
 		super("Inventory Management System");
+		jFrame=this;
 
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -109,19 +116,25 @@ public class MainWindow extends JFrame implements WindowListener {
 		Labor newLabour = new Labor();
 		Employee employee = new Employee();
 		Customer customer = new Customer();
+		Main_Labor mainlabor = new Main_Labor();
+		LabourReport labourreport = new LabourReport();
+		OrderReport orderreport = new OrderReport();
 		// Create the panel that contains the "cards".
 		cards = new JPanel();
 		cards.setLayout(new CardLayout());
 		cards.add(new JPanel(), "1");
-		cards.add(newUser, USERADD);
+		cards.add(new NewUser(), USERADD);
 		cards.add(order, ADD_ORDER);
 		cards.add(newvehicle, ADD_VEHICLE);
 		cards.add(laborwork, ADD_LABOR_WORK);
-		cards.add(newLabour, ADD_LABOUR);
+		cards.add(new Labor(), ADD_LABOUR);
 		cards.add(employee, ADD_EMPLOYEE);
 		cards.add(customer, ADD_CUSTOMER);
 		cards.add(new OrderForm(), ORDER_FORM);
 		cards.add(new AddBrickType(), ADD_BRICK_TYPE);
+		cards.add(mainlabor, ADD_MAIN_LABOR);
+		cards.add(new LabourReport(), ADD_LABOUR_REPORT);
+		cards.add(orderreport, ADD_ORDER_REPORT);
 
 		getContentPane().setLayout(new BorderLayout(0, 0));
 		panel_Top.setLayout(new BorderLayout(0, 0));
@@ -212,6 +225,18 @@ public class MainWindow extends JFrame implements WindowListener {
 		mnuNewuser.setActionCommand("newuser");
 		mnuNewuser.addActionListener(menulistener);
 
+		// mainLabour
+		mnuMainLabor = new JMenuItem("Main Labour");
+		mnuMainLabor.setForeground(Color.blue);
+		mnuMainLabor.setFont(new Font("monospaced", Font.PLAIN, 14));
+		mnuMainLabor.setMnemonic('E');
+		mnuMainLabor.setIcon(new ImageIcon("images/user.png"));
+		mnuMainLabor.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A,
+				ActionEvent.CTRL_MASK));
+		mnuMainLabor.setActionCommand("addmainlabor");
+		mnuMainLabor.addActionListener(menulistener);
+
+		
 		// mnuNewLabour
 		mnuNewLabour = new JMenuItem("Add new Labour");
 		mnuNewLabour.setForeground(Color.blue);
@@ -311,15 +336,26 @@ public class MainWindow extends JFrame implements WindowListener {
 		mnuExit.setActionCommand("exit");
 		mnuExit.addActionListener(menulistener);
 
-		mnuItemReport = new JMenuItem("generate reports");
+		mnuItemReport = new JMenuItem("generate Order reports");
 		mnuItemReport.setForeground(Color.blue);
 		mnuItemReport.setFont(new Font("monospaced", Font.PLAIN, 14));
 		mnuItemReport.setMnemonic('L');
 		mnuItemReport.setIcon(new ImageIcon("images/report.png"));
 		mnuItemReport.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L,
 				ActionEvent.CTRL_MASK));
-		mnuItemReport.setActionCommand("report");
+		mnuItemReport.setActionCommand("orderreport");
 		mnuItemReport.addActionListener(menulistener);
+		
+		//Labour report
+		mnuLabourReport = new JMenuItem("generate Labour reports");
+		mnuLabourReport.setForeground(Color.blue);
+		mnuLabourReport.setFont(new Font("monospaced", Font.PLAIN, 14));
+		mnuLabourReport.setMnemonic('L');
+		mnuLabourReport.setIcon(new ImageIcon("images/report.png"));
+		mnuLabourReport.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L,
+				ActionEvent.CTRL_MASK));
+		mnuLabourReport.setActionCommand("labourreport");
+		mnuLabourReport.addActionListener(menulistener);
 
 		menuItemAbout = new JMenuItem("about");
 		menuItemAbout.setForeground(Color.blue);
@@ -347,6 +383,8 @@ public class MainWindow extends JFrame implements WindowListener {
 		mnuOperations.addSeparator();
 		mnuOperations.add(mnuAddOrderForm);
 		mnuOperations.addSeparator();
+		mnuOperations.add(mnuMainLabor);
+		mnuOperations.addSeparator();
 		mnuOperations.add(mnuOrder);
 		mnuOperations.addSeparator();
 		mnuOperations.add(mnuAddLaborWork);
@@ -355,6 +393,7 @@ public class MainWindow extends JFrame implements WindowListener {
 
 		/******************* add menu item to reports ***************************/
 		mnuReports.add(mnuItemReport);
+		mnuReports.add(mnuLabourReport);
 
 		mnuHelp.add(menuItemAbout);
 
@@ -399,9 +438,15 @@ public class MainWindow extends JFrame implements WindowListener {
 				cl.show(cards, USERADD);
 			} else if (ActCmd.equalsIgnoreCase("addLabour")) {
 				cl.show(cards, ADD_LABOUR);
-			} else if (ActCmd.equalsIgnoreCase("addVehicleinfo")) {
+			}else if (ActCmd.equalsIgnoreCase("addmainlabor")) {
+				cl.show(cards, ADD_MAIN_LABOR);
+			}
+			else if (ActCmd.equalsIgnoreCase("addVehicleinfo")) {
 				cl.show(cards, ADD_ORDER);
-			} else if (ActCmd.equalsIgnoreCase("addVehicle")) {
+			}else if (ActCmd.equalsIgnoreCase("orderreport")) {
+				cl.show(cards, ADD_ORDER_REPORT);
+			}
+			else if (ActCmd.equalsIgnoreCase("addVehicle")) {
 				cl.show(cards, ADD_VEHICLE);
 			} else if (ActCmd.equalsIgnoreCase("addEmployee")) {
 				cl.show(cards, ADD_EMPLOYEE);
@@ -411,7 +456,9 @@ public class MainWindow extends JFrame implements WindowListener {
 				cl.show(cards, ADD_LABOR_WORK);
 			} else if (ActCmd.equalsIgnoreCase("addOrderForm")) {
 				cl.show(cards, ORDER_FORM);
-			} else if (ActCmd.equalsIgnoreCase("addBrickType")) {
+			} else if (ActCmd.equalsIgnoreCase("labourreport")) {
+				cl.show(cards, ADD_LABOUR_REPORT); }
+			else if (ActCmd.equalsIgnoreCase("addBrickType")) {
 				cl.show(cards, ADD_BRICK_TYPE);
 			}else if (ActCmd.equalsIgnoreCase("exit")) {
 				ConfirmExit();
@@ -464,5 +511,11 @@ public class MainWindow extends JFrame implements WindowListener {
 	@Override
 	public void windowDeactivated(WindowEvent e) {
 
+	}
+	
+	public void validate(){
+		
+	cards.revalidate();
+		//this.getContentPane().setVisible(true);
 	}
 }

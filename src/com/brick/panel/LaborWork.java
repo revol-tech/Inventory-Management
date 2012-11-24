@@ -638,7 +638,7 @@ public class LaborWork extends JPanel {
 						.toString().trim());
 				float rate = databasehelper.getRate("Red Coin", 1);
 				float amount = noOfBrick * rate;
-				result = databasehelper.insertWorkEntry(labourId, 2, noOfBrick,
+				result = databasehelper.insertWorkEntry(labourId, 1, noOfBrick,
 						amount, currentDate);
 			}
 			if (!txtBrickADistanceB.getText().toString().trim().equals("")) {
@@ -656,7 +656,7 @@ public class LaborWork extends JPanel {
 						.toString().trim());
 				float rate = databasehelper.getRate("yellow", 1);
 				float amount = noOfBrick * rate;
-				result = databasehelper.insertWorkEntry(labourId, 2, noOfBrick,
+				result = databasehelper.insertWorkEntry(labourId, 3, noOfBrick,
 						amount, currentDate);
 			}
 
@@ -667,7 +667,7 @@ public class LaborWork extends JPanel {
 						.toString().trim());
 				float rate = databasehelper.getRate("Red Coin", 2);
 				float amount = noOfBrick * rate;
-				result = databasehelper.insertWorkEntry(labourId, 2, noOfBrick,
+				result = databasehelper.insertWorkEntry(labourId, 4, noOfBrick,
 						amount, currentDate);
 			}
 			if (!txtBrickBDistanceB.getText().toString().trim().equals("")) {
@@ -676,7 +676,7 @@ public class LaborWork extends JPanel {
 						.toString().trim());
 				float rate = databasehelper.getRate("blue", 2);
 				float amount = noOfBrick * rate;
-				result = databasehelper.insertWorkEntry(labourId, 2, noOfBrick,
+				result = databasehelper.insertWorkEntry(labourId, 5, noOfBrick,
 						amount, currentDate);
 			}
 			if (!txtBrickBDistanceC.getText().toString().trim().equals("")) {
@@ -685,7 +685,7 @@ public class LaborWork extends JPanel {
 						.toString().trim());
 				float rate = databasehelper.getRate("yellow", 2);
 				float amount = noOfBrick * rate;
-				result = databasehelper.insertWorkEntry(labourId, 2, noOfBrick,
+				result = databasehelper.insertWorkEntry(labourId, 6, noOfBrick,
 						amount, currentDate);
 			}
 			if (result > 0) {
