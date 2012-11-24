@@ -81,7 +81,7 @@ public class MainWindow extends JFrame implements WindowListener {
 	public MainWindow() {
 		// Create and set up the window.
 		super("Inventory Management System");
-		jFrame=this;
+		
 
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -513,9 +513,5 @@ public class MainWindow extends JFrame implements WindowListener {
 
 	}
 	
-	public void validate(){
-		
-	cards.revalidate();
-		//this.getContentPane().setVisible(true);
-	}
+
 }
