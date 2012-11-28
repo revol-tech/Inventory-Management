@@ -128,8 +128,7 @@ public class Labor extends JPanel {
 						JOptionPane.showMessageDialog(null,
 								"successfully added", "succedd",
 								JOptionPane.DEFAULT_OPTION);
-						MainWindow.cards.invalidate();
-						resetFields();
+							resetFields();
 					}
 
 				}

@@ -6,7 +6,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import com.brick.helper.BrickHelper;
 import com.brick.helper.CustomerHelper;
@@ -73,7 +76,24 @@ public class DatabaseHelper {
 		String query = "";
 	}
 
+	public String fetchlabourtype(int id)
+	{
+		String result="";
+		String query = "SELECT type From labour where id ='"+id+"'";
+		try {
+			pst = connection.prepareStatement(query);
+			rs = pst.executeQuery();
+			while (rs.next()) {
+				result = rs.getString("type");
+			}
+		} catch (SQLException e) {
 
+			e.printStackTrace();
+		}
+		return result;
+
+		
+	}
 
 	public ArrayList<CustomerHelper> fetchCustomerName() {
 		ArrayList<CustomerHelper> list = new ArrayList<CustomerHelper>();
@@ -99,6 +119,26 @@ public class DatabaseHelper {
 	public ArrayList<EmployeeHelper> fetchDriverName() {
 		ArrayList<EmployeeHelper> list = new ArrayList<EmployeeHelper>();
 		String query = "SELECT * From employee where E_Type='driver'";
+		System.out.println("check");
+		try {
+			pst = connection.prepareStatement(query);
+			rs = pst.executeQuery();
+			while (rs.next()) {
+				EmployeeHelper driverName = new EmployeeHelper();
+				driverName.id = rs.getInt("E_id");
+				driverName.name = rs.getString("E_Name");
+				list.add(driverName);
+			}
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	public ArrayList<EmployeeHelper> fetchEmployeeName() {
+		ArrayList<EmployeeHelper> list = new ArrayList<EmployeeHelper>();
+		String query = "SELECT * From employee";
 		System.out.println("check");
 		try {
 			pst = connection.prepareStatement(query);
@@ -165,6 +205,21 @@ public class DatabaseHelper {
 
 
 	}
+	
+	public ResultSet fetchattendance(int empid) throws SQLException {
+
+		String query = "Select Date,Absent,Leaves,Reason From attendance WHERE MONTH((Date)) = 11 AND E_id='"+empid+"';";
+		Statement stmt = null;
+		String errorMessage = "";
+	
+			stmt = connection.createStatement();
+			ResultSet result = stmt.executeQuery(query);
+			return result;
+		
+
+
+	}
+
 
 	
 	public ResultSet fetchorder() throws SQLException {
@@ -345,6 +400,24 @@ public class DatabaseHelper {
 		}
 		return result;
 	}
+	
+	public int insertabsent(int e_id, Date date , int absent, int leave, String reason) {
+System.err.println(date);
+DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+String currentDate = dateFormat.format(date);
+		String query = "insert into attendance(`E_id`,`Date`,`Absent`,`Leaves`,`Reason`) values('"+e_id+"','"+currentDate+"','"+absent+"','"+leave+"','"+reason+"');";
+		int result = -1;
+		Statement stmt = null;
+		try {
+			stmt = connection.createStatement();
+			result = stmt.executeUpdate(query);
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
 	public int insertCustomer(String name,String pAddress,String tAddress,int Mobile,int Telephone)
 	{
 		

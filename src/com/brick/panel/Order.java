@@ -49,7 +49,7 @@ public class Order extends JPanel {
 	private final JTextField txtHalf = new JTextField();
 	private final JComboBox<VehicleInfo> comboBoxVehicleNo = new JComboBox<VehicleInfo>();
 	private final JComboBox<EmployeeHelper> comboBoxDriverName = new JComboBox<EmployeeHelper>();
-	private final JComboBox<BrickHelper> comboBoxBrickType = new JComboBox<BrickHelper>();
+	private final JTextField comboBoxBrickType = new JTextField();
 	private final JLabel lblCustomerName = new JLabel("Customer Name");
 	private final JButton btnConfirmOrder = new JButton("Confirm Order");
 	private final JLabel lblOrderDelivery = new JLabel("Order Delivery");
@@ -277,15 +277,7 @@ public class Order extends JPanel {
 		ArrayList<BrickHelper> bricklist = new ArrayList<BrickHelper>();
 		bricklist = databasehelper.fetchBrickName();
 		comboBoxBrickType.setEditable(true);
-		comboBoxBrickType.setRenderer(new ComboBoxItemRenderer());
-		comboBoxBrickType.setEditor(new ComboBoxItemEditor());
-		model = new DefaultComboBoxModel();
-		comboBoxBrickType.setModel(model);
-		for (BrickHelper brickHelper : bricklist) {
-
-			model.addElement(brickHelper);
-		}
-
+		
 		GridBagConstraints gbc_lblBalance = new GridBagConstraints();
 		gbc_lblBalance.anchor = GridBagConstraints.WEST;
 		gbc_lblBalance.insets = new Insets(0, 0, 5, 5);
@@ -370,7 +362,7 @@ public class Order extends JPanel {
 						txtVoucherNo.getText(),
 						((VehicleInfo) comboBoxVehicleNo.getSelectedItem()).vechileId,
 						((EmployeeHelper) comboBoxDriverName.getSelectedItem()).id,
-						((BrickHelper) comboBoxBrickType.getSelectedItem()).id,
+						Integer.valueOf(comboBoxBrickType.getText().trim().isEmpty()?"0":comboBoxBrickType.getText().trim()),
 						Integer.valueOf(txtHalf.getText().toString().equals("") ? "0"
 								: txtHalf.getText().toString()),
 						((CustomerHelper) comboBoxCustomer.getSelectedItem()).id,

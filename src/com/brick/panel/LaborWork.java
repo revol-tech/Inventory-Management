@@ -267,6 +267,26 @@ public class LaborWork extends JPanel {
 
 			model.addElement(laborHelper);
 		}
+		labourname.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				int id = (((LaborHelper) labourname.getSelectedItem()).id);
+				String result = databasehelper.fetchlabourtype(id);
+				System.err.println(result);
+				if (result.equalsIgnoreCase("patheri"))
+				{
+					comboBoxLaborType.setSelectedItem(labortype[3]);
+				}
+				else if (result.equalsIgnoreCase("bokenya"))
+				{
+					comboBoxLaborType.setSelectedItem(labortype[2]);
+				}
+				else
+				{
+					comboBoxLaborType.setSelectedItem(labortype[1]);
+				}
+			}
+		});
 
 		btnSubmit.addActionListener(new ButtonListener());
 		button.addActionListener(new ButtonListener());

@@ -32,6 +32,7 @@ import com.brick.helper.ToolBarUtils;
 import com.brick.panel.AddBrickType;
 import com.brick.panel.Customer;
 import com.brick.panel.Employee;
+import com.brick.panel.EmployeeAttendance;
 import com.brick.panel.Labor;
 import com.brick.panel.LaborWork;
 import com.brick.panel.LabourReport;
@@ -59,10 +60,12 @@ public class MainWindow extends JFrame implements WindowListener {
 	final static String ADD_MAIN_LABOR = "Labor functionality";
 	final static String ADD_LABOUR_REPORT = "Labor report";
 	final static String ADD_ORDER_REPORT = "Order report";
+	final static String ADD_ATTENDANCE = "Attendance form";
+	
 
 	public JMenu mnuOperations, mnuReports, mnuHelp;
 	public JMenuItem mnuNewuser, mnuNewLabour, mnuOrder, mnuAddVehicle,
-			mnuAddLaborWork, mnuItemReport, mnuExit, menuItemAbout,
+			mnuAddLaborWork, mnuItemReport, mnuExit, menuItemAbout,mnuAttendance,
 			mnuAddEmployee, mnuAddCustomer, mnuAddBrickType, mnuAddOrderForm,mnuMainLabor,mnuLabourReport,mnuOrderReport;
 	ToolBarUtils settings = new ToolBarUtils();
 	Dimension screen;
@@ -119,6 +122,7 @@ public class MainWindow extends JFrame implements WindowListener {
 		Main_Labor mainlabor = new Main_Labor();
 		LabourReport labourreport = new LabourReport();
 		OrderReport orderreport = new OrderReport();
+		EmployeeAttendance employeeattendance = new EmployeeAttendance();
 		// Create the panel that contains the "cards".
 		cards = new JPanel();
 		cards.setLayout(new CardLayout());
@@ -135,6 +139,7 @@ public class MainWindow extends JFrame implements WindowListener {
 		cards.add(mainlabor, ADD_MAIN_LABOR);
 		cards.add(new LabourReport(), ADD_LABOUR_REPORT);
 		cards.add(orderreport, ADD_ORDER_REPORT);
+		cards.add(employeeattendance, ADD_ATTENDANCE);
 
 		getContentPane().setLayout(new BorderLayout(0, 0));
 		panel_Top.setLayout(new BorderLayout(0, 0));
@@ -235,6 +240,17 @@ public class MainWindow extends JFrame implements WindowListener {
 				ActionEvent.CTRL_MASK));
 		mnuMainLabor.setActionCommand("addmainlabor");
 		mnuMainLabor.addActionListener(menulistener);
+
+		// attendance
+		mnuAttendance = new JMenuItem("Employee Attendance");
+		mnuAttendance.setForeground(Color.blue);
+		mnuAttendance.setFont(new Font("monospaced", Font.PLAIN, 14));
+		mnuAttendance.setMnemonic('E');
+		mnuAttendance.setIcon(new ImageIcon("images/user.png"));
+		mnuAttendance.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A,
+				ActionEvent.CTRL_MASK));
+		mnuAttendance.setActionCommand("attendance");
+		mnuAttendance.addActionListener(menulistener);
 
 		
 		// mnuNewLabour
@@ -389,6 +405,8 @@ public class MainWindow extends JFrame implements WindowListener {
 		mnuOperations.addSeparator();
 		mnuOperations.add(mnuAddLaborWork);
 		mnuOperations.addSeparator();
+		mnuOperations.add(mnuAttendance);
+		mnuOperations.addSeparator();
 		mnuOperations.add(mnuExit);
 
 		/******************* add menu item to reports ***************************/
@@ -460,7 +478,10 @@ public class MainWindow extends JFrame implements WindowListener {
 				cl.show(cards, ADD_LABOUR_REPORT); }
 			else if (ActCmd.equalsIgnoreCase("addBrickType")) {
 				cl.show(cards, ADD_BRICK_TYPE);
-			}else if (ActCmd.equalsIgnoreCase("exit")) {
+			}else if (ActCmd.equalsIgnoreCase("attendance")) {
+				cl.show(cards, ADD_ATTENDANCE);
+			}
+			else if (ActCmd.equalsIgnoreCase("exit")) {
 				ConfirmExit();
 			}
 		}
@@ -513,5 +534,4 @@ public class MainWindow extends JFrame implements WindowListener {
 
 	}
 	
-
 }
