@@ -1,27 +1,36 @@
 package com.brick.panel;
 
-import javax.swing.JPanel;
 import java.awt.BorderLayout;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.ImageIcon;
-import javax.swing.JOptionPane;
-
 import java.awt.Color;
-import javax.swing.JLabel;
-import java.awt.Font;
+import java.awt.Component;
 import java.awt.FlowLayout;
-import java.awt.GridBagLayout;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
+import javax.swing.BoxLayout;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.ListCellRenderer;
+import javax.swing.event.CaretEvent;
+import javax.swing.event.CaretListener;
 
 import com.brick.database.DatabaseHelper;
+import com.brick.helper.ComboBoxItemEditor;
+import com.brick.helper.ComboBoxItemRenderer;
+import com.brick.helper.CustomerHelper;
 
 public class OrderForm extends JPanel {
 	private final JPanel panel = new JPanel();
@@ -34,21 +43,53 @@ public class OrderForm extends JPanel {
 	private final JLabel lblBrick = new JLabel("Brick");
 	private final JCheckBox chckbxHalf = new JCheckBox("Half");
 	private final JLabel lblDestination = new JLabel("Destination");
-	private final JComboBox comboBoxCustomerName = new JComboBox();
+	private final JComboBox<CustomerHelper> comboBoxCustomerName = new JComboBox<CustomerHelper>();
 	private final JTextField txtDestination = new JTextField();
 	private final JTextField txtBrick = new JTextField();
 	private final JTextField txtHalf = new JTextField();
 	private final JButton btnOrder = new JButton("Order");
 	private JPanel panelOrderForm;
+	private DatabaseHelper databaseHelper = new DatabaseHelper();
+	private DefaultComboBoxModel model;
 
 	/**
 	 * Create the panel.
 	 */
 	public OrderForm() {
-		panelOrderForm=this;
+		panelOrderForm = this;
 		txtHalf.setColumns(10);
 		txtBrick.setColumns(10);
 		txtDestination.setColumns(10);
+		txtBrick.addCaretListener(new CaretListener() {
+
+			@Override
+			public void caretUpdate(CaretEvent e) {
+
+				if (txtBrick.getText().toString().trim().length() > 0
+						&& !txtBrick.getText().toString().trim()
+								.matches(AddBrickType.numToken)) {
+					JOptionPane.showMessageDialog(null,
+							"Brick should be a number", "Invalid input",
+							JOptionPane.DEFAULT_OPTION);
+					txtBrick.requestFocus();
+				}
+			}
+		});
+
+		txtHalf.addCaretListener(new CaretListener() {
+
+			@Override
+			public void caretUpdate(CaretEvent e) {
+				if (txtHalf.getText().toString().trim().length() > 0
+						&& !txtHalf.getText().toString().trim()
+								.matches(AddBrickType.numToken)) {
+					JOptionPane.showMessageDialog(null,
+							"Brick should be a number", "Invalid input",
+							JOptionPane.DEFAULT_OPTION);
+					txtHalf.requestFocus();
+				}
+			}
+		});
 
 		initGUI();
 	}
@@ -79,6 +120,7 @@ public class OrderForm extends JPanel {
 		gbc_comboBoxCustomerName.fill = GridBagConstraints.BOTH;
 		gbc_comboBoxCustomerName.gridx = 1;
 		gbc_comboBoxCustomerName.gridy = 0;
+		comboBoxCustomerName.setFont(new Font("Dialog", Font.BOLD, 14));
 		panel.add(comboBoxCustomerName, gbc_comboBoxCustomerName);
 
 		GridBagConstraints gbc_lblDestination = new GridBagConstraints();
@@ -155,17 +197,79 @@ public class OrderForm extends JPanel {
 		button.setIcon(new ImageIcon("images/exit.png"));
 
 		panel_3.add(button);
+		button.addActionListener(new CustomActionListner());
+		btnOrder.addActionListener(new CustomActionListner());
+		setUpComboBox();
+
+	}
+
+	public void setUpComboBox() {
+		comboBoxCustomerName.setEditable(true);
+		comboBoxCustomerName.setRenderer(new ComboBoxItemRenderer());
+
+		ArrayList<CustomerHelper> customerList = databaseHelper.getCustomer();
+		comboBoxCustomerName.setEditor(new ComboBoxItemEditor());
+		model = new DefaultComboBoxModel();
+		comboBoxCustomerName.setModel(model);
+		for (CustomerHelper customerHelper : customerList) {
+			model.addElement(customerHelper);
+		}
 	}
 
 	public class CustomActionListner implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
-			DatabaseHelper databaseHelper = new DatabaseHelper();
+
 			if (e.getSource() == btnOrder) {
+				if (((CustomerHelper) comboBoxCustomerName.getSelectedItem()).name
+						.equals("")) {
+					JOptionPane.showMessageDialog(null, " Select Customer",
+							"Missing field", JOptionPane.DEFAULT_OPTION);
+					comboBoxCustomerName.requestFocus();
+					return;
+				}
+				if (txtDestination.getText().toString().trim().equals("")) {
+					JOptionPane.showMessageDialog(null, "Enter description",
+							"Missing field", JOptionPane.DEFAULT_OPTION);
+					txtDestination.requestFocus();
+					return;
+				}
+				if (txtBrick.getText().toString().equals("")) {
+					JOptionPane.showMessageDialog(null, "Enter brick ",
+							"Missing field", JOptionPane.DEFAULT_OPTION);
+					txtBrick.requestFocus();
+					return;
+				}
+				int id = ((CustomerHelper) comboBoxCustomerName
+						.getSelectedItem()).id;
+				int no_of_brick = Integer.valueOf(txtBrick.getText());
+				int half_brick = Integer.valueOf(txtHalf.getText().trim()
+						.equals("") ? "0" : txtHalf.getText().toString());
+
+				int result = databaseHelper.insertOrderEntry(id, txtDestination
+						.getText().toString(), no_of_brick, half_brick);
+				if (result > 0) {
+
+					JOptionPane.showMessageDialog(null,
+							"successfuly added order entry", "",
+							JOptionPane.DEFAULT_OPTION);
+					resetField();
+
+				} else {
+					JOptionPane.showMessageDialog(null,
+							"Database connection error", "",
+							JOptionPane.DEFAULT_OPTION);
+				}
 
 			} else if (e.getSource() == button) {
 				panelOrderForm.setVisible(false);
 			}
 		}
+	}
+
+	public void resetField() {
+		txtBrick.setText("");
+		txtDestination.setText("");
+		txtHalf.setText("");
 	}
 }
