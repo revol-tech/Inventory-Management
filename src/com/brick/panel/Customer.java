@@ -2,6 +2,7 @@ package com.brick.panel;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -17,8 +18,10 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 import com.brick.database.DatabaseHelper;
+import com.brick.frame.MainWindow;
 
 public class Customer extends JPanel {
 
@@ -44,6 +47,7 @@ public class Customer extends JPanel {
 	private final JTextField txtMobileNo = new JTextField();
 	private final JTextField txtTelephoneNo = new JTextField();
 	private final JButton btnCreate = new JButton("Create");
+	OrderForm orderForm;
 
 	/**
 	 * Create the panel.
@@ -57,6 +61,10 @@ public class Customer extends JPanel {
 		txtCustomerName.setColumns(10);
 
 		initGUI();
+	}
+
+	public void setOrderPanel(OrderForm orderForm) {
+		this.orderForm = orderForm;
 	}
 
 	private void initGUI() {
@@ -179,15 +187,18 @@ public class Customer extends JPanel {
 									.valueOf(txtTelephoneNo.getText().trim()
 											.isEmpty() ? "0" : txtTelephoneNo
 											.getText().trim()));
+
 					txtCustomerName.setText("");
 					txtPermanentAddress.setText("");
 					txtTemporaryAddress.setText("");
 					txtTelephoneNo.setText("");
 					txtMobileNo.setText("");
+					orderForm.setUpComboBox();
 					JOptionPane.showMessageDialog(null,
 							"New Employee Added Successfully", "SUCCESS",
 							JOptionPane.DEFAULT_OPTION);
 
+				
 				}
 			}
 		});
@@ -221,6 +232,15 @@ public class Customer extends JPanel {
 		});
 
 		panel_3.add(button);
+	}
+
+	@Override
+	public void addNotify() {
+		// TODO Auto-generated method stub
+		panelAddCustomer.getRootPane().invalidate();
+		panelAddCustomer.getRootPane().getParent().invalidate();
+		panelAddCustomer.getParent().getParent().invalidate();
+		super.addNotify();
 	}
 
 }
