@@ -2,6 +2,7 @@ package com.brick.panel;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -22,7 +23,13 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.JTextPane;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyleContext;
 
 import com.brick.database.DatabaseHelper;
 import com.brick.helper.ComboBoxItemEditor;
@@ -39,7 +46,8 @@ public class LaborWork extends JPanel {
 	String[] labortype = { "", "Madeshi", "Bokenya", "Patheri" };
 	private final JLabel lblLaborType = new JLabel("Labor Type");
 	private final JComboBox<LaborHelper> labourname = new JComboBox<LaborHelper>();
-
+	private final JScrollPane scrollPane = new JScrollPane();
+	private final JTextPane textPane = new JTextPane();
 	private final JComboBox comboBoxLaborType = new JComboBox(labortype);
 	private final JPanel patheri = new JPanel();
 	private final JPanel madhesi = new JPanel();
@@ -75,6 +83,7 @@ public class LaborWork extends JPanel {
 	private JPanel panelLabourWork;
 	private String currentSelected;
 	private DefaultComboBoxModel model;
+	private LaborWork laborWork;
 
 	/**
 	 * Create the panel.new
@@ -121,12 +130,23 @@ public class LaborWork extends JPanel {
 		gbc_comboBoxLaborType.gridy = 1;
 		comboBoxLaborType.setFont(new Font("Dialog", Font.BOLD, 14));
 		panel.add(comboBoxLaborType, gbc_comboBoxLaborType);
+		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
+		gbc_scrollPane.insets = new Insets(0, 30, 0, 0);
+		gbc_scrollPane.gridheight = 4;
+		gbc_scrollPane.fill = GridBagConstraints.BOTH;
+		gbc_scrollPane.gridx = 2;
+		gbc_scrollPane.gridy = 0;
+		//gbc_textPane.setRows(1);
+		scrollPane.setPreferredSize(new Dimension(300, 300));
+		panel.add(scrollPane,gbc_scrollPane);
+		textPane.setEditable(false);
+		scrollPane.setViewportView(textPane);
 		GridBagConstraints gbc_patheri = new GridBagConstraints();
 		gbc_patheri.gridwidth = 5;
 		gbc_patheri.anchor = GridBagConstraints.WEST;
 		gbc_patheri.insets = new Insets(20, 0, 20, 5);
 		gbc_patheri.gridx = 0;
-		gbc_patheri.gridy = 2;
+		gbc_patheri.gridy = 3;
 		panel.add(patheri, gbc_patheri);
 		GridBagConstraints gbc_bokenya = new GridBagConstraints();
 		gbc_bokenya.gridwidth = 5;
@@ -255,19 +275,10 @@ public class LaborWork extends JPanel {
 		gbc_btnSubmit.gridx = 0;
 		gbc_btnSubmit.gridy = 4;
 		panel.add(btnSubmit, gbc_btnSubmit);
-		ArrayList<LaborHelper> list = new ArrayList<LaborHelper>();
-		list = databasehelper.fetchLaborName();
+		
 		initGUI();
-		labourname.setEditable(true);
-		labourname.setRenderer(new ComboBoxItemRenderer());
-		labourname.setEditor(new ComboBoxItemEditor());
-		model=new DefaultComboBoxModel();
-		labourname.setModel(model);
-		for (LaborHelper laborHelper : list) {
-
-			model.addElement(laborHelper);
-		}
-		labourname.addActionListener(new ActionListener() {
+		populateLaborWork();
+				labourname.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
 				int id = (((LaborHelper) labourname.getSelectedItem()).id);
@@ -313,7 +324,7 @@ public class LaborWork extends JPanel {
 		panel_1.add(panel_3);
 		button.setIcon(new ImageIcon("images/exit.png"));
 
-		panel_3.add(button);
+		//panel_3.add(button);
 		add(panel, BorderLayout.CENTER);
 		GridBagLayout gbl_bokenya = new GridBagLayout();
 		gbl_bokenya.columnWidths = new int[] { 140, 287, 0 };
@@ -594,6 +605,11 @@ public class LaborWork extends JPanel {
 				JOptionPane.showMessageDialog(null,
 						"successfuly added Labour work", "",
 						JOptionPane.DEFAULT_OPTION);
+				textPane.setEditable(true);
+				appendToPane(textPane, "\n"+((LaborHelper) labourname.getSelectedItem()).name,Font.BOLD,Color.blue);
+				appendToPane(textPane, "(Patheri)"+"\n",Font.BOLD,Color.pink);
+				appendToPanework(textPane, "Number of Bricks ="+noOfBrick+"\n",Color.black);
+				textPane.setEditable(false);
 				resetField();
 
 			} else {
@@ -613,8 +629,23 @@ public class LaborWork extends JPanel {
 				float amount = noOfBrick * rate;
 				result = databasehelper.insertWorkEntry(labourId, 1, noOfBrick,
 						amount, currentDate);
+				textPane.setEditable(true);
+				appendToPane(textPane, "\n"+((LaborHelper) labourname.getSelectedItem()).name,Font.BOLD,Color.blue);
+				appendToPane(textPane, "(Bokenya)"+"\n",Font.BOLD,Color.pink);
+				appendToPanework(textPane, "Distance A ="+noOfBrick+"\n",Color.black);
+				//textPane.setText(textPane.getText()+"\n"+((LaborHelper) labourname.getSelectedItem()).name+"--->"+"Bokenya");
+				//textArea.append("\n");
+				//textArea.append("Distance A ="+noOfBrick);
+				//appendToPane(textPane, ((LaborHelper) labourname.getSelectedItem()).name+"--->"+"Bokenya"+"\n", Font.BOLD,Color.black);
+				textPane.setEditable(false);
 			}
 			if (!txtDistanceB.getText().toString().trim().equals("")) {
+				if (txtDistanceA.getText().toString().trim().equals("")) {
+					textPane.setEditable(true);
+					appendToPane(textPane, "\n"+((LaborHelper) labourname.getSelectedItem()).name,Font.BOLD,Color.blue);
+					appendToPane(textPane, "(Bokenya)"+"\n",Font.BOLD,Color.pink);
+					textPane.setEditable(false);
+				}
 				int labourId = ((LaborHelper) labourname.getSelectedItem()).id;
 				int noOfBrick = Integer.valueOf(txtDistanceB.getText()
 						.toString().trim());
@@ -622,8 +653,17 @@ public class LaborWork extends JPanel {
 				float amount = noOfBrick * rate;
 				result = databasehelper.insertWorkEntry(labourId, 1, noOfBrick,
 						amount, currentDate);
+				textPane.setEditable(true);
+				appendToPanework(textPane, "Distance B ="+noOfBrick+"\n",Color.black);
+				textPane.setEditable(false);
 			}
 			if (!txtDistanceC.getText().toString().trim().equals("")) {
+				if (txtDistanceB.getText().toString().trim().equals("") && txtDistanceA.getText().toString().trim().equals("")) {
+					textPane.setEditable(true);
+					appendToPane(textPane, "\n"+((LaborHelper) labourname.getSelectedItem()).name,Font.BOLD,Color.blue);
+					appendToPane(textPane, "(Bokenya)"+"\n",Font.BOLD,Color.pink);
+					textPane.setEditable(false);
+				}
 				int labourId = ((LaborHelper) labourname.getSelectedItem()).id;
 				int noOfBrick = Integer.valueOf(txtDistanceC.getText()
 						.toString().trim());
@@ -631,6 +671,9 @@ public class LaborWork extends JPanel {
 				float amount = noOfBrick * rate;
 				result = databasehelper.insertWorkEntry(labourId, 1, noOfBrick,
 						amount, currentDate);
+				textPane.setEditable(true);
+				appendToPanework(textPane, "Distance C ="+noOfBrick+"\n",Color.black);
+				textPane.setEditable(false);
 			}
 			if (result > 0) {
 
@@ -660,8 +703,19 @@ public class LaborWork extends JPanel {
 				float amount = noOfBrick * rate;
 				result = databasehelper.insertWorkEntry(labourId, 1, noOfBrick,
 						amount, currentDate);
+				textPane.setEditable(true);
+				appendToPane(textPane, "\n"+((LaborHelper) labourname.getSelectedItem()).name,Font.BOLD,Color.blue);
+				appendToPane(textPane, "(Madesha)"+"\n",Font.BOLD,Color.pink);
+				appendToPanework(textPane, "Distance A(Brick A) ="+noOfBrick+"\n",Color.black);
+				textPane.setEditable(false);
 			}
 			if (!txtBrickADistanceB.getText().toString().trim().equals("")) {
+				if (txtBrickADistanceA.getText().toString().trim().equals("")) {
+					textPane.setEditable(true);
+					appendToPane(textPane, "\n"+((LaborHelper) labourname.getSelectedItem()).name,Font.BOLD,Color.blue);
+					appendToPane(textPane, "(Madesha)"+"\n",Font.BOLD,Color.pink);
+					textPane.setEditable(false);
+				}
 				int labourId = ((LaborHelper) labourname.getSelectedItem()).id;
 				int noOfBrick = Integer.valueOf(txtBrickADistanceB.getText()
 						.toString().trim());
@@ -669,8 +723,17 @@ public class LaborWork extends JPanel {
 				float amount = noOfBrick * rate;
 				result = databasehelper.insertWorkEntry(labourId, 2, noOfBrick,
 						amount, currentDate);
+				textPane.setEditable(true);
+				appendToPanework(textPane, "Distance B(Brick A) ="+noOfBrick+"\n",Color.black);
+				textPane.setEditable(false);
 			}
 			if (!txtBrickADistanceC.getText().toString().trim().equals("")) {
+				if (txtBrickADistanceB.getText().toString().trim().equals("") && txtBrickADistanceA.getText().toString().trim().equals("")) {
+					textPane.setEditable(true);
+					appendToPane(textPane, "\n"+((LaborHelper) labourname.getSelectedItem()).name,Font.BOLD,Color.blue);
+					appendToPane(textPane, "(Madesha)"+"\n",Font.BOLD,Color.pink);
+					textPane.setEditable(false);
+				}
 				int labourId = ((LaborHelper) labourname.getSelectedItem()).id;
 				int noOfBrick = Integer.valueOf(txtBrickADistanceC.getText()
 						.toString().trim());
@@ -678,9 +741,18 @@ public class LaborWork extends JPanel {
 				float amount = noOfBrick * rate;
 				result = databasehelper.insertWorkEntry(labourId, 3, noOfBrick,
 						amount, currentDate);
+				textPane.setEditable(true);
+				appendToPanework(textPane, "Distance C(Brick A) ="+noOfBrick+"\n",Color.black);
+				textPane.setEditable(false);
 			}
 
 			if (!txtBrickBDistanceA.getText().toString().trim().equals("")) {
+				if (txtBrickADistanceC.getText().toString().trim().equals("") && txtBrickADistanceB.getText().toString().trim().equals("") && txtBrickADistanceA.getText().toString().trim().equals("")) {
+					textPane.setEditable(true);
+					appendToPane(textPane, "\n"+((LaborHelper) labourname.getSelectedItem()).name,Font.BOLD,Color.blue);
+					appendToPane(textPane, "(Madesha)"+"\n",Font.BOLD,Color.pink);
+					textPane.setEditable(false);
+				}
 				System.out.print("sss1" + labourname.getSelectedItem());
 				int labourId = ((LaborHelper) labourname.getSelectedItem()).id;
 				int noOfBrick = Integer.valueOf(txtBrickBDistanceA.getText()
@@ -689,8 +761,17 @@ public class LaborWork extends JPanel {
 				float amount = noOfBrick * rate;
 				result = databasehelper.insertWorkEntry(labourId, 4, noOfBrick,
 						amount, currentDate);
+				textPane.setEditable(true);
+				appendToPanework(textPane, "Distance A(Brick B) ="+noOfBrick+"\n",Color.black);
+				textPane.setEditable(false);
 			}
 			if (!txtBrickBDistanceB.getText().toString().trim().equals("")) {
+				if (txtBrickBDistanceA.getText().toString().trim().equals("") && txtBrickADistanceC.getText().toString().trim().equals("") && txtBrickADistanceB.getText().toString().trim().equals("") && txtBrickADistanceA.getText().toString().trim().equals("")) {
+					textPane.setEditable(true);
+					appendToPane(textPane, "\n"+((LaborHelper) labourname.getSelectedItem()).name,Font.BOLD,Color.blue);
+					appendToPane(textPane, "(Madesha)"+"\n",Font.BOLD,Color.pink);
+					textPane.setEditable(false);
+				}
 				int labourId = ((LaborHelper) labourname.getSelectedItem()).id;
 				int noOfBrick = Integer.valueOf(txtBrickBDistanceB.getText()
 						.toString().trim());
@@ -698,8 +779,17 @@ public class LaborWork extends JPanel {
 				float amount = noOfBrick * rate;
 				result = databasehelper.insertWorkEntry(labourId, 5, noOfBrick,
 						amount, currentDate);
+				textPane.setEditable(true);
+				appendToPanework(textPane, "Distance B(Brick B) ="+noOfBrick+"\n",Color.black);
+				textPane.setEditable(false);
 			}
 			if (!txtBrickBDistanceC.getText().toString().trim().equals("")) {
+				if (txtBrickBDistanceB.getText().toString().trim().equals("") && txtBrickBDistanceA.getText().toString().trim().equals("") && txtBrickADistanceC.getText().toString().trim().equals("") && txtBrickADistanceB.getText().toString().trim().equals("") && txtBrickADistanceA.getText().toString().trim().equals("")) {
+					textPane.setEditable(true);
+					appendToPane(textPane, "\n"+((LaborHelper) labourname.getSelectedItem()).name,Font.BOLD,Color.blue);
+					appendToPane(textPane, "(Madesha)"+"\n",Font.BOLD,Color.pink);
+					textPane.setEditable(false);
+				}
 				int labourId = ((LaborHelper) labourname.getSelectedItem()).id;
 				int noOfBrick = Integer.valueOf(txtBrickBDistanceC.getText()
 						.toString().trim());
@@ -707,6 +797,9 @@ public class LaborWork extends JPanel {
 				float amount = noOfBrick * rate;
 				result = databasehelper.insertWorkEntry(labourId, 6, noOfBrick,
 						amount, currentDate);
+				textPane.setEditable(true);
+				appendToPanework(textPane, "Distance C(Brick B) ="+noOfBrick+"\n",Color.black);
+				textPane.setEditable(false);
 			}
 			if (result > 0) {
 
@@ -724,6 +817,37 @@ public class LaborWork extends JPanel {
 		}
 
 	}
+	
+	private void appendToPane(JTextPane tp, String msg, int bold,Color c)
+    {
+		System.err.println(bold);
+        StyleContext sc = StyleContext.getDefaultStyleContext();
+        AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground,c);
+        aset = sc.addAttribute(aset, StyleConstants.CharacterConstants.Bold, true);
+        aset = sc.addAttribute(aset, StyleConstants.FontSize,18);
+        aset = sc.addAttribute(aset, StyleConstants.FontFamily, "Lucida Console");
+        aset = sc.addAttribute(aset, StyleConstants.Alignment, StyleConstants.ALIGN_JUSTIFIED);
+
+        int len = tp.getDocument().getLength();
+        tp.setCaretPosition(len);
+        tp.setCharacterAttributes(aset, false);
+        tp.replaceSelection(msg);
+    }
+
+	private void appendToPanework(JTextPane tp, String msg,Color c)
+    {
+        StyleContext sc = StyleContext.getDefaultStyleContext();
+        AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground,c);
+        aset = sc.addAttribute(aset, StyleConstants.CharacterConstants.Bold, true);
+        aset = sc.addAttribute(aset, StyleConstants.FontSize,15);
+        aset = sc.addAttribute(aset, StyleConstants.FontFamily, "Lucida Console");
+        aset = sc.addAttribute(aset, StyleConstants.Alignment, StyleConstants.ALIGN_JUSTIFIED);
+
+        int len = tp.getDocument().getLength();
+        tp.setCaretPosition(len);
+        tp.setCharacterAttributes(aset, false);
+        tp.replaceSelection(msg);
+    }
 
 	public void resetField() {
 		txtBrickADistanceA.setText("");
@@ -738,4 +862,21 @@ public class LaborWork extends JPanel {
 		txtBrickAmount.setText("");
 
 	}
+	
+	public void populateLaborWork(){
+		ArrayList<LaborHelper> list = new ArrayList<LaborHelper>();
+		list = databasehelper.fetchLaborName();
+		labourname.setEditable(true);
+		labourname.setRenderer(new ComboBoxItemRenderer());
+		labourname.setEditor(new ComboBoxItemEditor());
+		model=new DefaultComboBoxModel();
+		labourname.setModel(model);
+		
+		for (LaborHelper laborHelper : list) {
+
+			model.addElement(laborHelper);
+		}
+
+	}
+	
 }

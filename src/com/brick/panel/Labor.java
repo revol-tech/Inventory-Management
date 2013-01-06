@@ -1,28 +1,33 @@
 package com.brick.panel;
 
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.SwingUtilities;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.JTextPane;
+import javax.swing.SwingConstants;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyleContext;
 
 import com.brick.database.DatabaseHelper;
-import com.brick.frame.MainWindow;
-
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import javax.swing.ImageIcon;
-import java.awt.FlowLayout;
-import javax.swing.BoxLayout;
-import java.awt.BorderLayout;
-import javax.swing.SwingConstants;
-import java.awt.Color;
-import java.awt.Font;
 
 public class Labor extends JPanel {
 	/**
@@ -32,6 +37,8 @@ public class Labor extends JPanel {
 
 	String[] labortype = { "", "Madeshi", "Bokenya", "Patheri" };
 
+	private final JTextPane textPane = new JTextPane();
+	private final JScrollPane scrollPane = new JScrollPane();
 	private final JLabel lblNewLabel = new JLabel("Labor Name");
 	private final JLabel lblLaborType = new JLabel("Labor Type");
 	private final JTextField textField = new JTextField();
@@ -46,6 +53,8 @@ public class Labor extends JPanel {
 	private final JButton button = new JButton("");
 	private final JLabel lblNewLaborForm = new JLabel("New Labor Form");
 	private JPanel panelLabour;
+	private LaborRecords laborRecord;
+	private LaborWork laborWork;
 
 	/**
 	 * Create the panel.
@@ -59,6 +68,17 @@ public class Labor extends JPanel {
 		gbl_panel.columnWeights = new double[] { 0.0, 0.0 };
 		gbl_panel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0 };
 		panel.setLayout(gbl_panel);
+		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
+		gbc_scrollPane.insets = new Insets(0, 30, 0, 0);
+		gbc_scrollPane.gridheight = 4;
+		gbc_scrollPane.fill = GridBagConstraints.BOTH;
+		gbc_scrollPane.gridx = 2;
+		gbc_scrollPane.gridy = 0;
+		//gbc_textPane.setRows(1);
+		scrollPane.setPreferredSize(new Dimension(300, 300));
+		panel.add(scrollPane,gbc_scrollPane);
+		textPane.setEditable(false);
+		scrollPane.setViewportView(textPane);
 		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
 		gbc_lblNewLabel.anchor = GridBagConstraints.WEST;
 		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
@@ -128,7 +148,18 @@ public class Labor extends JPanel {
 						JOptionPane.showMessageDialog(null,
 								"successfully added", "succedd",
 								JOptionPane.DEFAULT_OPTION);
-							resetFields();
+						textPane.setEditable(true);
+						appendToPanework(textPane, "\n"+textField.getText()
+							.toString()+"\n", Color.blue);
+						appendToPanework(textPane, "Type = "+comboBox.getSelectedItem().toString()+"\n", Color.blue);
+						if(!comboBox.getSelectedItem().toString().equalsIgnoreCase("patheri"))
+						{
+							appendToPanework(textPane, "Brick Amount = "+textField_1.getText().toString()+"\n", Color.blue);
+						}
+						textPane.setEditable(false);
+						laborRecord.populateTable();
+						laborWork.populateLaborWork();
+						resetFields();
 					}
 
 				}
@@ -180,11 +211,35 @@ public class Labor extends JPanel {
 		panel_1.add(panel_3);
 		button.setIcon(new ImageIcon("images/exit.png"));
 
-		panel_3.add(button);
+		//panel_3.add(button);
 	}
 
 	private void resetFields() {
 		textField.setText("");
 		textField_1.setText("");
 	}
+	private void appendToPanework(JTextPane tp, String msg,Color c)
+    {
+        StyleContext sc = StyleContext.getDefaultStyleContext();
+        AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground,c);
+        aset = sc.addAttribute(aset, StyleConstants.CharacterConstants.Bold, true);
+        aset = sc.addAttribute(aset, StyleConstants.FontSize,15);
+        aset = sc.addAttribute(aset, StyleConstants.FontFamily, "Lucida Console");
+        aset = sc.addAttribute(aset, StyleConstants.Alignment, StyleConstants.ALIGN_JUSTIFIED);
+
+        int len = tp.getDocument().getLength();
+        tp.setCaretPosition(len);
+        tp.setCharacterAttributes(aset, false);
+        tp.replaceSelection(msg);
+    }
+	
+	public void setLaborRecord(LaborRecords laborRecords){
+	
+		this.laborRecord = laborRecords;
+	}
+	public void setLaborWork(LaborWork laborWorks){
+		
+		this.laborWork = laborWorks;
+	}
+	
 }

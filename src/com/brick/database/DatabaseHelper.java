@@ -16,6 +16,7 @@ import com.brick.helper.CustomerHelper;
 import com.brick.helper.EmployeeHelper;
 import com.brick.helper.LaborHelper;
 import com.brick.helper.VehicleInfo;
+import com.sun.org.apache.xalan.internal.xsltc.compiler.sym;
 
 public class DatabaseHelper {
 	private Connection connection = null;
@@ -155,6 +156,21 @@ public class DatabaseHelper {
 		}
 		return list;
 	}
+	
+	public ResultSet fetchEmployee() {
+		ArrayList<EmployeeHelper> list = new ArrayList<EmployeeHelper>();
+		String query = "SELECT * From employee";
+		System.out.println("check");
+		try {
+			pst = connection.prepareStatement(query);
+			rs = pst.executeQuery();
+			
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+		}
+		return rs;
+	}
 
 	public ArrayList<BrickHelper> fetchBrickName() {
 		ArrayList<BrickHelper> list = new ArrayList<BrickHelper>();
@@ -205,7 +221,22 @@ public class DatabaseHelper {
 
 
 	}
+
+	public ResultSet fetchlaborrecords() throws SQLException {
+
+		String query = "SELECT * from labour;";
+		Statement stmt = null;
+		String errorMessage = "";
+		//int result = -1;
 	
+			stmt = connection.createStatement();
+			ResultSet result = stmt.executeQuery(query);
+			return result;
+		//return new Object[] { result,errorMessage };
+
+
+	}
+
 	public ResultSet fetchattendance(int empid) throws SQLException {
 
 		String query = "Select Date,Absent,Leaves,Reason From attendance WHERE MONTH((Date)) = 11 AND E_id='"+empid+"';";
@@ -237,6 +268,22 @@ public class DatabaseHelper {
 
 	}
 	
+	public void deleterow(int id) throws SQLException {
+
+		String query = "SELECT C.name,OE.destination,OE.no_of_brick,OE.no_of_halfbrick from order_entry OE,customer C where OE.customer_id=C.id;";
+		Statement stmt = null;
+		String errorMessage = "";
+		//int result = -1;
+	
+			stmt = connection.createStatement();
+			ResultSet result = stmt.executeQuery(query);
+			
+		//return new Object[] { result,errorMessage };
+
+
+	}
+	
+	
 	
 	public Object insertOrderDelivery(String voucher, int vehicle, int driver,
 			int brick, int half, int customer, String destination) {
@@ -250,6 +297,55 @@ public class DatabaseHelper {
 				+ "','"
 				+ brick
 				+ "','" + customer + "','" + destination + "','" + half + "');";
+		Statement stmt = null;
+		String errorMessage = "";
+		int result = -1;
+		try {
+			stmt = connection.createStatement();
+			result = stmt.executeUpdate(query);
+		} catch (Exception e) {
+			errorMessage = e.getMessage();
+			e.printStackTrace();
+		}
+		return new Object[] { result,errorMessage };
+
+	}
+	
+	public Object insertCoal(String date,String amount, String rate) {
+		float realAmount = Float.valueOf(amount);
+		float realRate = Float.valueOf(rate);
+
+		String query = "insert into Coal(date,amount,rate) values('"
+				+ date
+				+ "','"
+				+ realAmount
+				+ "','"
+				+ realRate
+				+ "');";
+		Statement stmt = null;
+		String errorMessage = "";
+		int result = -1;
+		try {
+			stmt = connection.createStatement();
+			result = stmt.executeUpdate(query);
+		} catch (Exception e) {
+			errorMessage = e.getMessage();
+			e.printStackTrace();
+		}
+		return new Object[] { result,errorMessage };
+
+	}
+
+	public Object insertLandEntry(String date,String amount, String purpose) {
+		float realAmount = Float.valueOf(amount);
+
+		String query = "insert into Land(date,amount,purpose) values('"
+				+ date
+				+ "','"
+				+ realAmount
+				+ "','"
+				+ purpose
+				+ "');";
 		Statement stmt = null;
 		String errorMessage = "";
 		int result = -1;
@@ -359,6 +455,28 @@ public class DatabaseHelper {
 		return result;
 
 	}
+	
+	public int fetchbrickamount(int id) {
+		String query = "SELECT * From labour where id = '"+id+"' ";
+		Statement stmt = null;
+		int value=0;
+		//int result = -1;
+		try {
+			stmt = connection.createStatement();
+			System.err.println(query);
+			ResultSet result = stmt.executeQuery(query);
+			if (result.next())
+			{
+				 value = result.getInt("brick_amount");
+				 System.err.println("pranij");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return value;
+
+	}
+
 
 	public int insertLabour(String name, String type, String brick) {
 		if (type == "Patheri") {
@@ -497,5 +615,20 @@ String currentDate = dateFormat.format(date);
 		return rate;
 
 	}
+	
+	public  void updatelabour(int id,String name,String type, int bamount) {
+		String query = "UPDATE labour SET name = '"+name+"', brick_amount ='"+bamount+"' WHERE id ='"+id+"'";
+			Statement stmt = null;
+			int result = -1;
+			try {
+			stmt = connection.createStatement();
+			result = stmt.executeUpdate(query);
+			} catch (Exception e) {
+			e.printStackTrace();
+			}
+
+
+	}
+
 
 }

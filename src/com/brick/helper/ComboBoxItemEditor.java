@@ -10,7 +10,6 @@ import java.awt.Insets;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.plaf.basic.BasicComboBoxEditor;
 
 /**
@@ -20,12 +19,10 @@ import javax.swing.plaf.basic.BasicComboBoxEditor;
  */
 public class ComboBoxItemEditor extends BasicComboBoxEditor {
 	private JPanel panel = new JPanel();
-	private JTextField labelItem = new JTextField();
-
+	private JLabel labelItem = new JLabel();
 	private String selectedValue;
 	
 	public ComboBoxItemEditor() {
-		labelItem.setBorder(null);
 		panel.setLayout(new GridBagLayout());
 		GridBagConstraints constraints = new GridBagConstraints();
 		constraints.fill = GridBagConstraints.HORIZONTAL;
