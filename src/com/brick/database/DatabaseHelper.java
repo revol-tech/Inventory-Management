@@ -54,7 +54,7 @@ public class DatabaseHelper {
 		}
 		return false;
 	}
-// commit -m sdsa
+// commit -m sdsa ajsdshjk
 	public int addNewUser(String userName, String password) {
 		String query = "INSERT INTO user (username,password) values ('"
 				+ userName + "','" + password + "');";
