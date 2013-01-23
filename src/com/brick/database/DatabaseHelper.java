@@ -28,7 +28,7 @@ public class DatabaseHelper {
 			Class.forName("com.mysql.jdbc.Driver");
 			connection = DriverManager.getConnection(
 					"jdbc:mysql://localhost:3306/brick_inventory", "root",
-					"shresthas");
+					"admin");
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}

@@ -38,6 +38,8 @@ public class AddBrickType extends JPanel {
 	private final JTextField txtRate = new JTextField();
 	private final JButton btnAdd = new JButton("Add");
 	private JPanel panelAddBrickType;
+	public static String numToken = "[\\p{Digit}]+";
+	
 
 	/**
 	 * Create the panel.
@@ -50,7 +52,7 @@ public class AddBrickType extends JPanel {
 		txtBrickDescription.setColumns(10);
 		txtBrickType.setFont(new Font("Dialog", Font.PLAIN, 14));
 		txtBrickType.setColumns(10);
-		final String numToken = "[\\p{Digit}]+";
+		
 		txtRate.addCaretListener(new CaretListener() {
 
 			@Override
